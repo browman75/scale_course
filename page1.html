@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巨觀與微觀分類</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        .drag-over {
+            background-color: #e0f2fe !important;
+            border-color: #0284c7 !important;
+            border-width: 3px !important;
+        }
+        .correct-answer {
+            background-color: #dcfce7 !important;
+            border-color: #16a34a !important;
+        }
+        .wrong-answer {
+            background-color: #fef2f2 !important;
+            border-color: #dc2626 !important;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <!-- 標題 -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">巨觀與微觀分類遊戲</h1>
+            <p class="text-lg text-gray-600">將下方的物體拖拽到正確的分類框中</p>
+        </div>
+
+        <!-- 分類框區域 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- 巨觀框 -->
+            <div id="macro-box" class="bg-white rounded-xl border-4 border-dashed border-gray-300 p-6 min-h-64 transition-all duration-300">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-2">🔭</div>
+                    <h2 class="text-2xl font-bold text-blue-600">巨觀</h2>
+                    <p class="text-gray-500">肉眼可見的大尺度物體</p>
+                </div>
+                <div id="macro-items" class="space-y-2"></div>
+            </div>
+
+            <!-- 微觀框 -->
+            <div id="micro-box" class="bg-white rounded-xl border-4 border-dashed border-gray-300 p-6 min-h-64 transition-all duration-300">
+                <div class="text-center mb-4">
+                    <div class="text-6xl mb-2">🔬</div>
+                    <h2 class="text-2xl font-bold text-purple-600">微觀</h2>
+                    <p class="text-gray-500">需要顯微鏡才能看見的物體</p>
+                </div>
+                <div id="micro-items" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- 待分類物品區域 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">請將以下物品拖拽到正確分類</h3>
+            <div id="items-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <!-- 物品將通過 JavaScript 動態生成 -->
+            </div>
+        </div>
+
+        <!-- 結果顯示區域 -->
+        <div id="result-area" class="hidden bg-white rounded-xl shadow-lg p-6 mb-6 text-center">
+            <div id="result-message" class="text-2xl font-bold mb-4"></div>
+            <div id="score-display" class="text-lg text-gray-600"></div>
+        </div>
+
+        <!-- 按鈕區域 -->
+        <div class="flex flex-wrap justify-center gap-4">
+            <button id="check-btn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg">
+                檢查答案
+            </button>
+            <button id="reset-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg">
+                重置遊戲
+            </button>
+            <button id="next-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg">
+                下一頁
+            </button>
+            <button id="home-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg">
+                回到首頁
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 遊戲數據
+        const items = [
+            { id: 'human', name: '人', emoji: '👤', category: 'macro' },
+            { id: 'earth', name: '地球', emoji: '🌍', category: 'macro' },
+            { id: 'solar', name: '太陽系', emoji: '🌌', category: 'macro' },
+            { id: 'cell', name: '細胞', svg: true, category: 'micro' },
+            { id: 'bacteria', name: '細菌', emoji: '🦠', category: 'micro' },
+            { id: 'virus', name: '病毒', svg: true, category: 'micro' }
+        ];
+
+        // SVG 圖示
+        function getCellSVG() {
+            return `<svg width="48" height="48" viewBox="0 0 100 100" class="mx-auto">
+                <circle cx="50" cy="50" r="45" fill="#e8f4fd" stroke="#3b82f6" stroke-width="2"/>
+                <circle cx="50" cy="50" r="15" fill="#1e40af" opacity="0.8"/>
+                <circle cx="35" cy="35" r="8" fill="#60a5fa" opacity="0.6"/>
+                <circle cx="65" cy="40" r="6" fill="#60a5fa" opacity="0.6"/>
+                <circle cx="40" cy="65" r="7" fill="#60a5fa" opacity="0.6"/>
+                <circle cx="70" cy="70" r="5" fill="#60a5fa" opacity="0.6"/>
+                <path d="M25 30 Q35 25 45 30 Q55 35 65 30" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
+                <path d="M30 70 Q40 65 50 70 Q60 75 70 70" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
+            </svg>`;
+        }
+
+        function getVirusSVG() {
+            return `<svg width="48" height="48" viewBox="0 0 100 100" class="mx-auto">
+                <circle cx="50" cy="50" r="25" fill="#dc2626" opacity="0.8"/>
+                <circle cx="50" cy="50" r="20" fill="#ef4444" opacity="0.9"/>
+                <circle cx="45" cy="45" r="3" fill="#fca5a5"/>
+                <circle cx="55" cy="45" r="3" fill="#fca5a5"/>
+                <circle cx="50" cy="55" r="4" fill="#fca5a5"/>
+                <line x1="25" y1="50" x2="15" y2="50" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+                <line x1="75" y1="50" x2="85" y2="50" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+                <line x1="50" y1="25" x2="50" y2="15" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+                <line x1="50" y1="75" x2="50" y2="85" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+                <line x1="35.4" y1="35.4" x2="28.3" y2="28.3" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+                <line x1="64.6" y1="35.4" x2="71.7" y2="28.3" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+                <line x1="35.4" y1="64.6" x2="28.3" y2="71.7" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+                <line x1="64.6" y1="64.6" x2="71.7" y2="71.7" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+            </svg>`;
+        }
+
+        let gameState = {
+            macroItems: [],
+            microItems: [],
+            isChecked: false
+        };
+
+        // 初始化遊戲
+        function initGame() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+            
+            items.forEach(item => {
+                const itemElement = createItemElement(item);
+                container.appendChild(itemElement);
+            });
+
+            // 清空分類框
+            document.getElementById('macro-items').innerHTML = '';
+            document.getElementById('micro-items').innerHTML = '';
+            
+            // 重置遊戲狀態
+            gameState = { macroItems: [], microItems: [], isChecked: false };
+            
+            // 隱藏結果
+            document.getElementById('result-area').classList.add('hidden');
+            
+            // 重置分類框樣式
+            resetBoxStyles();
+        }
+
+        // 創建物品元素
+        function createItemElement(item) {
+            const div = document.createElement('div');
+            div.className = 'bg-gradient-to-r from-indigo-400 to-purple-500 text-white p-4 rounded-lg cursor-move shadow-lg hover:shadow-xl transition-all duration-200 text-center';
+            div.draggable = true;
+            div.dataset.id = item.id;
+            div.dataset.category = item.category;
+            
+            let iconHTML = '';
+            if (item.svg) {
+                if (item.id === 'cell') {
+                    iconHTML = getCellSVG();
+                } else if (item.id === 'virus') {
+                    iconHTML = getVirusSVG();
+                }
+            } else {
+                iconHTML = `<div class="text-3xl mb-2">${item.emoji}</div>`;
+            }
+            
+            div.innerHTML = `
+                <div class="mb-2">${iconHTML}</div>
+                <div class="font-semibold">${item.name}</div>
+            `;
+
+            // 拖拽事件
+            div.addEventListener('dragstart', handleDragStart);
+            div.addEventListener('dragend', handleDragEnd);
+
+            return div;
+        }
+
+        // 拖拽開始
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.id);
+            e.target.classList.add('dragging');
+        }
+
+        // 拖拽結束
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        // 設置放置區域事件
+        function setupDropZones() {
+            const macroBox = document.getElementById('macro-box');
+            const microBox = document.getElementById('micro-box');
+
+            [macroBox, microBox].forEach(box => {
+                box.addEventListener('dragover', handleDragOver);
+                box.addEventListener('drop', handleDrop);
+                box.addEventListener('dragenter', handleDragEnter);
+                box.addEventListener('dragleave', handleDragLeave);
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            if (!e.currentTarget.contains(e.relatedTarget)) {
+                e.currentTarget.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            
+            const itemId = e.dataTransfer.getData('text/plain');
+            const itemElement = document.querySelector(`[data-id="${itemId}"]`);
+            const targetBox = e.currentTarget.id;
+            
+            if (itemElement) {
+                // 移動元素到目標框
+                const targetContainer = targetBox === 'macro-box' ? 
+                    document.getElementById('macro-items') : 
+                    document.getElementById('micro-items');
+                
+                // 更新樣式
+                itemElement.className = 'bg-white border-2 border-gray-300 p-3 rounded-lg shadow-md text-center';
+                
+                const foundItem = items.find(item => item.id === itemId);
+                let iconHTML = '';
+                if (foundItem.svg) {
+                    if (foundItem.id === 'cell') {
+                        iconHTML = getCellSVG().replace('width="48" height="48"', 'width="32" height="32"');
+                    } else if (foundItem.id === 'virus') {
+                        iconHTML = getVirusSVG().replace('width="48" height="48"', 'width="32" height="32"');
+                    }
+                } else {
+                    iconHTML = `<div class="text-2xl mb-1">${foundItem.emoji}</div>`;
+                }
+                
+                itemElement.innerHTML = `
+                    <div class="mb-1">${iconHTML}</div>
+                    <div class="font-semibold text-gray-700">${foundItem.name}</div>
+                `;
+                
+                targetContainer.appendChild(itemElement);
+                
+                // 更新遊戲狀態
+                updateGameState();
+            }
+        }
+
+        // 更新遊戲狀態
+        function updateGameState() {
+            const macroContainer = document.getElementById('macro-items');
+            const microContainer = document.getElementById('micro-items');
+            
+            gameState.macroItems = Array.from(macroContainer.children).map(el => el.dataset.id);
+            gameState.microItems = Array.from(microContainer.children).map(el => el.dataset.id);
+        }
+
+        // 檢查答案
+        function checkAnswers() {
+            const correctMacro = ['human', 'earth', 'solar'];
+            const correctMicro = ['cell', 'bacteria', 'virus'];
+            
+            const macroCorrect = arraysEqual(gameState.macroItems.sort(), correctMacro.sort());
+            const microCorrect = arraysEqual(gameState.microItems.sort(), correctMicro.sort());
+            
+            const totalItems = gameState.macroItems.length + gameState.microItems.length;
+            
+            if (totalItems === 0) {
+                alert('請先將物品拖拽到分類框中！');
+                return;
+            }
+            
+            // 顯示結果
+            const resultArea = document.getElementById('result-area');
+            const resultMessage = document.getElementById('result-message');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            resultArea.classList.remove('hidden');
+            
+            if (macroCorrect && microCorrect && totalItems === 6) {
+                resultMessage.textContent = '🎉 恭喜！全部答對了！';
+                resultMessage.className = 'text-2xl font-bold mb-4 text-green-600';
+                scoreDisplay.textContent = '得分：100分';
+                
+                // 標記正確答案
+                document.getElementById('macro-box').classList.add('correct-answer');
+                document.getElementById('micro-box').classList.add('correct-answer');
+            } else {
+                resultMessage.textContent = '❌ 還有錯誤，請重新分類';
+                resultMessage.className = 'text-2xl font-bold mb-4 text-red-600';
+                
+                const correctCount = (macroCorrect ? gameState.macroItems.length : 0) + 
+                                   (microCorrect ? gameState.microItems.length : 0);
+                const score = Math.round((correctCount / 6) * 100);
+                scoreDisplay.textContent = `得分：${score}分`;
+                
+                // 標記錯誤答案
+                if (!macroCorrect) {
+                    document.getElementById('macro-box').classList.add('wrong-answer');
+                } else {
+                    document.getElementById('macro-box').classList.add('correct-answer');
+                }
+                
+                if (!microCorrect) {
+                    document.getElementById('micro-box').classList.add('wrong-answer');
+                } else {
+                    document.getElementById('micro-box').classList.add('correct-answer');
+                }
+            }
+            
+            gameState.isChecked = true;
+        }
+
+        // 重置框樣式
+        function resetBoxStyles() {
+            const macroBox = document.getElementById('macro-box');
+            const microBox = document.getElementById('micro-box');
+            
+            macroBox.className = 'bg-white rounded-xl border-4 border-dashed border-gray-300 p-6 min-h-64 transition-all duration-300';
+            microBox.className = 'bg-white rounded-xl border-4 border-dashed border-gray-300 p-6 min-h-64 transition-all duration-300';
+        }
+
+        // 比較數組
+        function arraysEqual(a, b) {
+            return a.length === b.length && a.every(val => b.includes(val));
+        }
+
+        // 事件監聽器
+        document.getElementById('check-btn').addEventListener('click', checkAnswers);
+        document.getElementById('reset-btn').addEventListener('click', initGame);
+        
+        document.getElementById('next-btn').addEventListener('click', function() {
+            // 保留空的網址連結
+            console.log('下一頁功能待實現');
+        });
+        
+        document.getElementById('home-btn').addEventListener('click', function() {
+            // 保留空的網址連結
+            console.log('回到首頁功能待實現');
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initGame();
+            setupDropZones();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9840318c010f844c',t:'MTc1ODY5NTAxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
