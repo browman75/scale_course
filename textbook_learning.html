@@ -1,174 +1,137 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>尺度的學習</title>
-  <style>
-    body { font-family: "Microsoft JhengHei", sans-serif; margin: 20px; }
-    .page { display: none; }
-    .active { display: block; }
-    button { margin: 10px; padding: 8px 16px; font-size: 16px; }
-    .question { margin: 15px 0; }
-    .feedback { margin-top: 5px; font-weight: bold; }
-    input[type="text"] { width: 80px; }
-  </style>
+<meta charset="UTF-8">
+<title>尺度學習網頁</title>
+<style>
+body { font-family:"Microsoft JhengHei",sans-serif; margin:20px; }
+.page { display:none; }
+.active { display:block; }
+button { margin:10px; padding:8px 16px; font-size:16px; }
+.question { margin:15px 0; }
+.feedback { margin-top:5px; font-weight:bold; }
+input[type="text"] { width:80px; }
+.draggable { display:inline-block; padding:8px 12px; margin:5px; background:#e0f7fa; border:1px solid #00796b; border-radius:8px; cursor:grab; }
+.dropzone { flex:1; min-height:150px; border:2px dashed #aaa; border-radius:10px; padding:10px; }
+.dropzone.over { border-color:#00796b; background:#f1f8e9; }
+</style>
 </head>
 <body>
-  <h1>尺度的學習</h1>
-  
-  <!-- 第1頁：拖曳分類 巨觀 vs 微觀 -->
-  <div class="page active" id="page1">
-    <h2>巨觀 vs 微觀 分類挑戰</h2>
-    <p>請將下列項目拖曳到正確的分類框中：</p>
-    <div id="items">
-      <div class="draggable" draggable="true" data-answer="巨觀">人</div>
-      <div class="draggable" draggable="true" data-answer="巨觀">地球</div>
-      <div class="draggable" draggable="true" data-answer="巨觀">太陽系</div>
-      <div class="draggable" draggable="true" data-answer="微觀">細胞</div>
-      <div class="draggable" draggable="true" data-answer="微觀">細菌</div>
-      <div class="draggable" draggable="true" data-answer="微觀">病毒</div>
-    </div>
-    <div style="display:flex; gap:20px; margin-bottom:15px;">
-      <div class="dropzone" data-zone="巨觀"><h3>巨觀</h3></div>
-      <div class="dropzone" data-zone="微觀"><h3>微觀</h3></div>
-    </div>
-    <button onclick="checkClassification()">提交答案</button>
-    <p id="classifyResult"></p>
+<h1>尺度的學習</h1>
+
+<!-- 第1頁：拖曳分類 巨觀 vs 微觀 -->
+<div class="page active" id="page1">
+  <h2>巨觀 vs 微觀 分類挑戰</h2>
+  <p>請將下列項目拖曳到正確的分類框中：</p>
+  <div id="items">
+    <div class="draggable" draggable="true" data-answer="巨觀">人</div>
+    <div class="draggable" draggable="true" data-answer="巨觀">地球</div>
+    <div class="draggable" draggable="true" data-answer="巨觀">太陽系</div>
+    <div class="draggable" draggable="true" data-answer="微觀">細胞</div>
+    <div class="draggable" draggable="true" data-answer="微觀">細菌</div>
+    <div class="draggable" draggable="true" data-answer="微觀">病毒</div>
   </div>
-  
-  <!-- 頁面 1：導入 -->
-  <div class="page active" id="page1">
-    <h2>📖 導入與概念建立</h2>
-    <p>科學家依尺度大小將事物分為 <b>巨觀</b>（人、地球、太陽系）與 <b>微觀</b>（細胞、細菌、病毒）。</p>
-    <div class="question">
-      <p>Q：肉眼能分辨的最小距離大約是多少？</p>
-      <button onclick="checkAnswer(this, '0.1mm')">0.1 毫米</button>
-      <button onclick="checkAnswer(this, '1mm')">1 毫米</button>
-      <button onclick="checkAnswer(this, '1μm')">1 微米</button>
-      <div class="feedback"></div>
-    </div>
+  <div style="display:flex; gap:20px; margin-bottom:15px;">
+    <div class="dropzone" data-zone="巨觀"><h3>巨觀</h3></div>
+    <div class="dropzone" data-zone="微觀"><h3>微觀</h3></div>
   </div>
+  <button onclick="checkClassification()">提交答案</button>
+  <p id="classifyResult"></p>
+</div>
 
-  <!-- 頁面 2：不同尺度下的觀察 -->
-  <div class="page" id="page2">
-    <h2>🔍 不同尺度下的觀察</h2>
-    <p>同一事物在不同尺度下會看到不同的特徵。</p>
-    <div class="question">
-      <p>配對題：請將「觀察工具」與「可見特徵」配對。</p>
-      <select id="q2a">
-        <option>請選擇</option>
-        <option value="肉眼">肉眼</option>
-        <option value="顯微鏡">顯微鏡</option>
-      </select>
-      → 蜻蜓的圓形大眼<br>
-      <select id="q2b">
-        <option>請選擇</option>
-        <option value="肉眼">肉眼</option>
-        <option value="顯微鏡">顯微鏡</option>
-      </select>
-      → 蜻蜓眼的六角形小眼
-      <div class="feedback" id="f2"></div>
-      <button onclick="checkQ2()">檢查答案</button>
-    </div>
+<!-- 第2頁：原本的導入選擇題 -->
+<div class="page" id="page2">
+  <h2>導入概念題</h2>
+  <p>科學家依尺度大小將事物分為巨觀（人、地球、太陽系）與微觀（細胞、細菌、病毒）。</p>
+  <div class="question">
+    <p>Q：肉眼能分辨的最小距離大約是多少？</p>
+    <button onclick="checkAnswer(this,'0.1mm')">0.1 毫米</button>
+    <button onclick="checkAnswer(this,'1mm')">1 毫米</button>
+    <button onclick="checkAnswer(this,'1μm')">1 微米</button>
+    <div class="feedback"></div>
   </div>
+</div>
 
-  <!-- 頁面 3：羽毛探索活動 -->
-  <div class="page" id="page3">
-    <h2>🪶 羽毛探索活動</h2>
-    <p>觀察羽毛在巨觀與微觀下的結構，思考其防風原因。</p>
-    <div class="question">
-      <p>Q：羽毛在微觀尺度下為何能維持整齊？</p>
-      <button onclick="checkAnswer(this, '鉤狀結構')">羽枝間有鉤狀結構</button>
-      <button onclick="checkAnswer(this, '顏色鮮豔')">因為羽毛顏色鮮豔</button>
-      <div class="feedback"></div>
-    </div>
+<!-- 第3頁：不同尺度觀察題 (原第2頁) -->
+<div class="page" id="page3">
+  <h2>不同尺度下的觀察</h2>
+  <p>同一事物在不同尺度下會看到不同特徵。</p>
+  <div class="question">
+    <p>配對題：請將「觀察工具」與「可見特徵」配對。</p>
+    <select id="q3a">
+      <option>請選擇</option>
+      <option value="肉眼">肉眼</option>
+      <option value="顯微鏡">顯微鏡</option>
+    </select> → 蜻蜓的圓形大眼<br>
+    <select id="q3b">
+      <option>請選擇</option>
+      <option value="肉眼">肉眼</option>
+      <option value="顯微鏡">顯微鏡</option>
+    </select> → 蜻蜓眼的六角形小眼
+    <div class="feedback" id="f3"></div>
+    <button onclick="checkQ3()">檢查答案</button>
   </div>
+</div>
 
-  <!-- 頁面 4：尺度表示方式 -->
-  <div class="page" id="page4">
-    <h2>📏 尺度表示方式</h2>
-    <p>尺度必須用「數字 + 單位」表示。</p>
-    <div class="question">
-      <p>頭髮直徑約 60 ______</p>
-      <select id="q4">
-        <option>請選擇</option>
-        <option value="cm">公分 (cm)</option>
-        <option value="μm">微米 (μm)</option>
-        <option value="nm">奈米 (nm)</option>
-      </select>
-      <div class="feedback" id="f4"></div>
-      <button onclick="checkQ4()">檢查答案</button>
-    </div>
-  </div>
+<!-- 導覽按鈕 -->
+<div>
+  <button onclick="prevPage()">上一頁</button>
+  <button onclick="nextPage()">下一頁</button>
+</div>
 
-  <!-- 頁面 5：尺度比較方式 -->
-  <div class="page" id="page5">
-    <h2>📊 尺度比較方式</h2>
-    <p>比較大小時，可以用生活類比或比例尺。</p>
-    <div class="question">
-      <p>Q：下列何者實際上較大？</p>
-      <button onclick="checkAnswer(this, '細菌')">細菌</button>
-      <button onclick="checkAnswer(this, '病毒')">病毒</button>
-      <div class="feedback"></div>
-    </div>
-  </div>
+<script>
+let current = 1;
+function showPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+}
+function nextPage(){ if(current<3){ current++; showPage(current); } }
+function prevPage(){ if(current>1){ current--; showPage(current); } }
 
-  <!-- 頁面 6：比例尺推算 -->
-  <div class="page" id="page6">
-    <h2>🧪 比例尺推算活動</h2>
-    <p>附圖中比例尺長度為 1 cm，代表真實長度 50 μm。</p>
-    <div class="question">
-      <p>若草履蟲影像長 3 cm，真實長度 = ______ μm</p>
-      <input type="text" id="q6"> 
-      <button onclick="checkQ6()">檢查答案</button>
-      <div class="feedback" id="f6"></div>
-    </div>
-  </div>
+// 拖曳功能
+const draggables = document.querySelectorAll('.draggable');
+const dropzones = document.querySelectorAll('.dropzone');
+draggables.forEach(item=>{
+  item.addEventListener('dragstart', e=>{
+    e.dataTransfer.setData('id', item.innerText);
+    e.dataTransfer.setData('answer', item.dataset.answer);
+  });
+});
+dropzones.forEach(zone=>{
+  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', ()=>zone.classList.remove('over'));
+  zone.addEventListener('drop', e=>{
+    e.preventDefault(); zone.classList.remove('over');
+    const id = e.dataTransfer.getData('id');
+    const answer = e.dataTransfer.getData('answer');
+    const item = [...draggables].find(d=>d.innerText===id);
+    if(item) zone.appendChild(item);
+  });
+});
+function checkClassification(){
+  let correct=true;
+  dropzones.forEach(zone=>{
+    const expected = zone.dataset.zone;
+    zone.querySelectorAll('.draggable').forEach(it=>{
+      if(it.dataset.answer !== expected) correct=false;
+    });
+  });
+  document.getElementById("classifyResult").innerText = correct ? "✅ 全部正確！" : "❌ 有錯誤，請再檢查。";
+}
 
-  <!-- 導覽按鈕 -->
-  <div>
-    <button onclick="prevPage()">上一頁</button>
-    <button onclick="nextPage()">下一頁</button>
-  </div>
-
-  <script>
-    let current = 1;
-    function showPage(n) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page'+n).classList.add('active');
-    }
-    function nextPage() { if(current<6){ current++; showPage(current);} }
-    function prevPage() { if(current>1){ current--; showPage(current);} }
-
-    function checkAnswer(btn, ans) {
-      let fb = btn.parentElement.querySelector('.feedback');
-      if (ans === '0.1mm' && btn.textContent.includes('0.1 毫米')) fb.textContent = "✔ 正確！肉眼極限約 0.1mm";
-      else if (ans === '鉤狀結構' && btn.textContent.includes('羽枝')) fb.textContent = "✔ 正確！羽毛有鉤狀結構";
-      else if (ans === '細菌' && btn.textContent.includes('細菌')) fb.textContent = "✔ 正確！細菌比病毒大";
-      else fb.textContent = "✘ 再想想看！";
-    }
-
-    function checkQ2() {
-      let a = document.getElementById('q2a').value;
-      let b = document.getElementById('q2b').value;
-      let fb = document.getElementById('f2');
-      if (a==='肉眼' && b==='顯微鏡') fb.textContent = "✔ 正確！";
-      else fb.textContent = "✘ 再想想！";
-    }
-
-    function checkQ4() {
-      let val = document.getElementById('q4').value;
-      let fb = document.getElementById('f4');
-      if (val==='μm') fb.textContent = "✔ 正確！頭髮直徑約 60 微米";
-      else fb.textContent = "✘ 再想想！";
-    }
-
-    function checkQ6() {
-      let val = parseFloat(document.getElementById('q6').value);
-      let fb = document.getElementById('f6');
-      if (Math.abs(val-150)<1) fb.textContent = "✔ 正確！3×50=150 μm";
-      else fb.textContent = "✘ 再試試！提示：3×50";
-    }
-  </script>
+// 原本選擇題判斷
+function checkAnswer(btn, ans){
+  let fb = btn.parentElement.querySelector('.feedback');
+  if(ans==='0.1mm' && btn.textContent.includes('0.1 毫米')) fb.textContent="✅ 正確";
+  else fb.textContent="❌ 錯誤，請再想想";
+}
+function checkQ3(){
+  let a=document.getElementById('q3a').value;
+  let b=document.getElementById('q3b').value;
+  let fb=document.getElementById('f3');
+  if(a==='肉眼' && b==='顯微鏡') fb.textContent="✅ 正確";
+  else fb.textContent="❌ 有錯，請再檢查";
+}
+</script>
 </body>
 </html>
