@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巨觀與微觀世界 - 互動學習</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .intro {
+            background: #f8f9ff;
+            padding: 25px;
+            border-left: 5px solid #4facfe;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        .intro p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .question-section {
+            margin: 30px 20px;
+            padding: 25px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 2px solid #e8f2ff;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .question-number {
+            background: #4facfe;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .checkbox-item:hover {
+            border-color: #4facfe;
+            background: #f8f9ff;
+        }
+
+        .checkbox-item.selected {
+            border-color: #4facfe;
+            background: #e8f4fd;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: #4facfe;
+        }
+
+        .thinking-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            margin: 30px 20px;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .thinking-section h3 {
+            color: #d63031;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .thinking-section p {
+            color: #2d3436;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .results {
+            margin: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            background: white;
+        }
+
+        .result-item.incorrect {
+            border-left-color: #dc3545;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: white;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 2px solid #dee2e6;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-color: #4facfe;
+            color: #4facfe;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin: 0 8px;
+        }
+
+        .prev-btn .nav-icon {
+            margin-right: 8px;
+            margin-left: 0;
+        }
+
+        .next-btn .nav-icon {
+            margin-left: 8px;
+            margin-right: 0;
+        }
+
+        .home-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .home-btn:hover {
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 巨觀與微觀世界</h1>
+            <p>探索從宏觀到微觀的神奇尺度變化</p>
+        </div>
+
+        <div class="intro">
+            <p>科學家依尺度大小將事物分為<strong>巨觀</strong>（人、地球、太陽系）與<strong>微觀</strong>（細胞、細菌、病毒）。讓我們一起探索這個奇妙的世界！</p>
+        </div>
+
+        <form id="quizForm">
+            <div class="question-section">
+                <div class="question">
+                    <div class="question-number">1</div>
+                    <div>使用iPad照課本P.45圖2，然後一直放大到最大，你會觀察到什麼？<br>
+                    <small style="color: #666; font-weight: normal;">灰色區塊放大後，是由_____排列組成。</small>
+                    </div>
+                </div>
+                <select name="q1" required>
+                    <option value="">請選擇答案</option>
+                    <option value="許多黑色小點">許多黑色小點</option>
+                    <option value="許多白色小點">許多白色小點</option>
+                    <option value="許多彩色小點">許多彩色小點</option>
+                    <option value="連續的灰色表面">連續的灰色表面</option>
+                </select>
+            </div>
+
+            <div class="question-section">
+                <div class="question">
+                    <div class="question-number">2</div>
+                    <div>為什麼肉眼看不出黑點？</div>
+                </div>
+                <select name="q2" required>
+                    <option value="">請選擇答案</option>
+                    <option value="因為肉眼可以分辨的距離有限">因為肉眼可以分辨的距離有限</option>
+                    <option value="因為黑點太小了">因為黑點太小了</option>
+                    <option value="因為光線不夠亮">因為光線不夠亮</option>
+                    <option value="因為眼睛疲勞">因為眼睛疲勞</option>
+                </select>
+            </div>
+
+            <div class="question-section">
+                <div class="question">
+                    <div class="question-number">3</div>
+                    <div>肉眼在距離25公分時，能分辨的最小距離大約是多少？</div>
+                </div>
+                <select name="q3" required>
+                    <option value="">請選擇答案</option>
+                    <option value="0.1 毫米">0.1 毫米</option>
+                    <option value="0.01 毫米">0.01 毫米</option>
+                    <option value="1 毫米">1 毫米</option>
+                    <option value="0.001 毫米">0.001 毫米</option>
+                </select>
+            </div>
+
+            <div class="question-section">
+                <div class="question">
+                    <div class="question-number">4</div>
+                    <div>微觀尺度的觀察工具是什麼？（複選題）</div>
+                </div>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="q4" value="眼鏡">
+                        <span>👓 眼鏡</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="q4" value="放大鏡">
+                        <span>🔍 放大鏡</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="q4" value="顯微鏡">
+                        <span>🔬 顯微鏡</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="q4" value="望遠鏡">
+                        <span>🔭 望遠鏡</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">提交答案 📝</button>
+        </form>
+
+        <div class="thinking-section">
+            <h3>🤔 想一想（不用作答）</h3>
+            <p>那為什麼血液放大之後，單看一個紅血球就沒有血液這麼紅？</p>
+        </div>
+
+        <div id="results" class="results">
+            <h3 style="color: #2c3e50; margin-bottom: 20px;">📊 答題結果</h3>
+            <div id="resultContent"></div>
+        </div>
+
+        <div class="navigation">
+            <a href="page1.html" class="nav-btn prev-btn">
+                <span class="nav-icon">←</span>
+                <span class="nav-text">上一頁</span>
+            </a>
+            <a href="index.html" class="nav-btn home-btn">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">回到首頁</span>
+            </a>
+            <a href="page1.html" class="nav-btn next-btn">
+                <span class="nav-text">下一頁</span>
+                <span class="nav-icon">→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 正確答案
+        const correctAnswers = {
+            q1: '許多黑色小點',
+            q2: '因為肉眼可以分辨的距離有限',
+            q3: '0.1 毫米',
+            q4: ['放大鏡', '顯微鏡']
+        };
+
+        // 處理複選框樣式
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                }
+                this.classList.toggle('selected', this.querySelector('input[type="checkbox"]').checked);
+            });
+        });
+
+        // 處理表單提交
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const results = document.getElementById('results');
+            const resultContent = document.getElementById('resultContent');
+            
+            let score = 0;
+            let totalQuestions = 4;
+            let resultHTML = '';
+
+            // 檢查第1題
+            const q1Answer = formData.get('q1');
+            const q1Correct = q1Answer === correctAnswers.q1;
+            if (q1Correct) score++;
+            
+            resultHTML += `
+                <div class="result-item ${q1Correct ? '' : 'incorrect'}">
+                    <strong>第1題:</strong> ${q1Correct ? '✅ 正確' : '❌ 錯誤'}<br>
+                    你的答案: ${q1Answer || '未作答'}<br>
+                    正確答案: ${correctAnswers.q1}
+                </div>
+            `;
+
+            // 檢查第2題
+            const q2Answer = formData.get('q2');
+            const q2Correct = q2Answer === correctAnswers.q2;
+            if (q2Correct) score++;
+            
+            resultHTML += `
+                <div class="result-item ${q2Correct ? '' : 'incorrect'}">
+                    <strong>第2題:</strong> ${q2Correct ? '✅ 正確' : '❌ 錯誤'}<br>
+                    你的答案: ${q2Answer || '未作答'}<br>
+                    正確答案: ${correctAnswers.q2}
+                </div>
+            `;
+
+            // 檢查第3題
+            const q3Answer = formData.get('q3');
+            const q3Correct = q3Answer === correctAnswers.q3;
+            if (q3Correct) score++;
+            
+            resultHTML += `
+                <div class="result-item ${q3Correct ? '' : 'incorrect'}">
+                    <strong>第3題:</strong> ${q3Correct ? '✅ 正確' : '❌ 錯誤'}<br>
+                    你的答案: ${q3Answer || '未作答'}<br>
+                    正確答案: ${correctAnswers.q3}
+                </div>
+            `;
+
+            // 檢查第4題（複選）
+            const q4Answers = formData.getAll('q4');
+            const q4Correct = q4Answers.length === correctAnswers.q4.length && 
+                             correctAnswers.q4.every(answer => q4Answers.includes(answer));
+            if (q4Correct) score++;
+            
+            resultHTML += `
+                <div class="result-item ${q4Correct ? '' : 'incorrect'}">
+                    <strong>第4題:</strong> ${q4Correct ? '✅ 正確' : '❌ 錯誤'}<br>
+                    你的答案: ${q4Answers.length > 0 ? q4Answers.join(', ') : '未作答'}<br>
+                    正確答案: ${correctAnswers.q4.join(', ')}
+                </div>
+            `;
+
+            // 顯示總分
+            const percentage = Math.round((score / totalQuestions) * 100);
+            let gradeEmoji = '';
+            if (percentage >= 90) gradeEmoji = '🏆';
+            else if (percentage >= 80) gradeEmoji = '🥇';
+            else if (percentage >= 70) gradeEmoji = '🥈';
+            else if (percentage >= 60) gradeEmoji = '🥉';
+            else gradeEmoji = '📚';
+
+            resultHTML = `
+                <div style="text-align: center; margin-bottom: 25px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px;">
+                    <h3>${gradeEmoji} 總分: ${score}/${totalQuestions} (${percentage}%)</h3>
+                </div>
+            ` + resultHTML;
+
+            resultContent.innerHTML = resultHTML;
+            results.style.display = 'block';
+            results.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98405e8c57dc3138',t:'MTc1ODY5Njg1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
