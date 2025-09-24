@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>選單</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #FCFCFC;
+      padding-top: 50px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    h2 {
+      font-size: 1.5em;
+      color: #00695c;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 0 20px;
+    }
+
+    .section {
+      flex: 1 1 300px;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+
+    .section a {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      background-color: #4db6ac;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 1.1em;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+
+    .section a:hover {
+      background-color: #00796b;
+    }
+
+    @media (max-width: 768px) {
+      .section-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>選單</h1>
+
+  <div class="section-container">
+
+    <div class="section">
+      <a href="t_eco_text.html">學習內容</a>
+      <a href="study_sheet.html">學習單</a>
+    </div>
+
+  </div>
+
+</body>
+</html>
