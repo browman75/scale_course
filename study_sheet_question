@@ -1,0 +1,133 @@
+export default function LearningApp() {
+  const pages = [
+    {
+      title: "尺度排序練習",
+      content: (
+        <div>
+          <p className="mb-2">依據尺度由小到大，填入該尺度符合的例子：</p>
+          <select id="scale1" className="border p-1 mr-2">
+            <option value="">選擇</option>
+            <option value="DNA">DNA</option>
+            <option value="頭髮直徑">頭髮直徑</option>
+            <option value="地球直徑">地球直徑</option>
+          </select>
+          <button
+            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+            onClick={() => {
+              const ans = document.getElementById("scale1").value;
+              const result = document.getElementById("result1");
+              if (ans === "DNA") {
+                result.innerText = "✅ 正確";
+              } else {
+                result.innerText = "❌ 錯誤，答案是 DNA";
+              }
+            }}
+          >
+            提交答案
+          </button>
+          <div id="result1" className="mt-2 font-bold"></div>
+        </div>
+      ),
+    },
+    {
+      title: "為什麼要觀察微觀尺度？",
+      content: (
+        <div>
+          <p className="mb-2">為什麼現代科學強調微觀尺度的觀察？</p>
+          <input id="scale2" className="border p-1 mr-2" placeholder="輸入答案" />
+          <button
+            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+            onClick={() => {
+              const ans = document.getElementById("scale2").value;
+              const result = document.getElementById("result2");
+              if (ans.includes("疾病") || ans.includes("細胞")) {
+                result.innerText = "✅ 正確 (例：顯微鏡觀察細胞結構)";
+              } else {
+                result.innerText = "❌ 錯誤，提示：與細胞或疾病研究有關";
+              }
+            }}
+          >
+            提交答案
+          </button>
+          <div id="result2" className="mt-2 font-bold"></div>
+        </div>
+      ),
+    },
+    {
+      title: "單位換算練習",
+      content: (
+        <div>
+          <p className="mb-2">如何將 100 微米轉換成公分？</p>
+          <input id="scale3" className="border p-1 mr-2" placeholder="輸入算式或答案" />
+          <button
+            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+            onClick={() => {
+              const ans = document.getElementById("scale3").value;
+              const result = document.getElementById("result3");
+              if (ans.includes("0.01") || ans.includes("1×10^-2")) {
+                result.innerText = "✅ 正確，100 微米 = 0.01 公分";
+              } else {
+                result.innerText = "❌ 錯誤，正確答案是 0.01 公分";
+              }
+            }}
+          >
+            提交答案
+          </button>
+          <div id="result3" className="mt-2 font-bold"></div>
+        </div>
+      ),
+    },
+    {
+      title: "比例尺計算練習",
+      content: (
+        <div>
+          <p className="mb-2">如何使用比例尺計算放大倍率？若圖中 1 公分代表實際 10 微米。</p>
+          <input id="scale4" className="border p-1 mr-2" placeholder="輸入倍率" />
+          <button
+            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+            onClick={() => {
+              const ans = document.getElementById("scale4").value;
+              const result = document.getElementById("result4");
+              if (ans.includes("1000") || ans.includes("1000倍")) {
+                result.innerText = "✅ 正確，倍率是 1000 倍";
+              } else {
+                result.innerText = "❌ 錯誤，答案是 1000 倍";
+              }
+            }}
+          >
+            提交答案
+          </button>
+          <div id="result4" className="mt-2 font-bold"></div>
+        </div>
+      ),
+    },
+  ];
+
+  const [page, setPage] = React.useState(0);
+
+  return (
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">尺度學習網頁</h1>
+      <div className="mb-4">
+        <h2 className="text-xl font-semibold mb-2">{pages[page].title}</h2>
+        {pages[page].content}
+      </div>
+      <div className="flex justify-between">
+        <button
+          className="px-3 py-1 bg-gray-400 text-white rounded disabled:opacity-50"
+          disabled={page === 0}
+          onClick={() => setPage(page - 1)}
+        >
+          上一頁
+        </button>
+        <button
+          className="px-3 py-1 bg-green-500 text-white rounded disabled:opacity-50"
+          disabled={page === pages.length - 1}
+          onClick={() => setPage(page + 1)}
+        >
+          下一頁
+        </button>
+      </div>
+    </div>
+  );
+}
