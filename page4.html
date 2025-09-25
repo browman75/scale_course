@@ -124,14 +124,14 @@
             text-align: center;
         }
 
-        .draggable-item {
+        .clickable-item {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             padding: 10px 8px;
             border-radius: 8px;
-            cursor: grab;
+            cursor: pointer;
             user-select: none;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
             text-align: center;
             font-weight: 500;
             font-size: 0.85rem;
@@ -139,21 +139,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 3px solid transparent;
         }
 
-        .draggable-item:hover {
+        .clickable-item:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
-        .draggable-item.dragging {
-            opacity: 0.5;
-            transform: rotate(5deg);
-        }
-
-        .draggable-item.selected {
+        .clickable-item.selected {
             background: linear-gradient(45deg, #48bb78, #38a169);
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+            border-color: #22543d;
         }
 
         .matching-area {
@@ -368,29 +366,29 @@
 
 
         <div class="section">
-            <h2>🎯 拖曳正確的描述</h2>
-            <p class="intro-text">將巨觀與微觀的描述拖曳到正確的格子內：</p>
+            <h2>🎯 點選正確的描述</h2>
+            <p class="intro-text">先點選一個描述，再點擊對應的格子來放入答案：</p>
             
             <div class="drag-drop-container">
                 <div class="items-pool">
                     <h3>📋 描述選項</h3>
                     <div class="items-grid">
-                        <div class="draggable-item" draggable="true" data-type="micro" data-organism="lotus">
+                        <div class="clickable-item" data-type="micro" data-organism="lotus">
                             有許多細小的突起，能夠隔離雜質和水
                         </div>
-                        <div class="draggable-item" draggable="true" data-type="macro" data-organism="insect">
+                        <div class="clickable-item" data-type="macro" data-organism="insect">
                             一顆圓形的眼睛
                         </div>
-                        <div class="draggable-item" draggable="true" data-type="micro" data-organism="salvinia">
+                        <div class="clickable-item" data-type="micro" data-organism="salvinia">
                             表面的毛狀構造能夠隔離水
                         </div>
-                        <div class="draggable-item" draggable="true" data-type="macro" data-organism="lotus">
+                        <div class="clickable-item" data-type="macro" data-organism="lotus">
                             有平坦的表面
                         </div>
-                        <div class="draggable-item" draggable="true" data-type="micro" data-organism="insect">
+                        <div class="clickable-item" data-type="micro" data-organism="insect">
                             複眼是由許多六角形的小眼所組成
                         </div>
-                        <div class="draggable-item" draggable="true" data-type="macro" data-organism="salvinia">
+                        <div class="clickable-item" data-type="macro" data-organism="salvinia">
                             表面有毛狀構造
                         </div>
                     </div>
@@ -401,32 +399,32 @@
                         <div class="scale-box macro" data-organism="insect" data-scale="macro">
                             <div class="scale-label">🐛 昆蟲複眼 - 巨觀</div>
                             <div class="image-placeholder">👁️</div>
-                            <div class="drop-text">拖曳描述到這裡</div>
+                            <div class="drop-text">點擊放入描述</div>
                         </div>
                         <div class="scale-box micro" data-organism="insect" data-scale="micro">
                             <div class="scale-label">🐛 昆蟲複眼 - 微觀</div>
                             <div class="image-placeholder">🔬</div>
-                            <div class="drop-text">拖曳描述到這裡</div>
+                            <div class="drop-text">點擊放入描述</div>
                         </div>
                         <div class="scale-box macro" data-organism="salvinia" data-scale="macro">
                             <div class="scale-label">🌿 槐葉蘋 - 巨觀</div>
                             <div class="image-placeholder">🍃</div>
-                            <div class="drop-text">拖曳描述到這裡</div>
+                            <div class="drop-text">點擊放入描述</div>
                         </div>
                         <div class="scale-box micro" data-organism="salvinia" data-scale="micro">
                             <div class="scale-label">🌿 槐葉蘋 - 微觀</div>
                             <div class="image-placeholder">🔬</div>
-                            <div class="drop-text">拖曳描述到這裡</div>
+                            <div class="drop-text">點擊放入描述</div>
                         </div>
                         <div class="scale-box macro" data-organism="lotus" data-scale="macro">
                             <div class="scale-label">🪷 蓮花葉面 - 巨觀</div>
                             <div class="image-placeholder">🪷</div>
-                            <div class="drop-text">拖曳描述到這裡</div>
+                            <div class="drop-text">點擊放入描述</div>
                         </div>
                         <div class="scale-box micro" data-organism="lotus" data-scale="micro">
                             <div class="scale-label">🪷 蓮花葉面 - 微觀</div>
                             <div class="image-placeholder">🔬</div>
-                            <div class="drop-text">拖曳描述到這裡</div>
+                            <div class="drop-text">點擊放入描述</div>
                         </div>
                     </div>
                 </div>
@@ -438,13 +436,13 @@
 
         <div class="section">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <a href="page3.html" target="_blank" rel="noopener noreferrer" class="nav-button prev-button">
+                <a href="page2.html" target="_blank" rel="noopener noreferrer" class="nav-button prev-button">
                     ← 上一頁
                 </a>
                 <a href="index.html" target="_blank" rel="noopener noreferrer" class="nav-button home-button">
                     🏠 回到首頁
                 </a>
-                <a href="page5.html" target="_blank" rel="noopener noreferrer" class="nav-button next-button">
+                <a href="page4.html" target="_blank" rel="noopener noreferrer" class="nav-button next-button">
                     下一頁 →
                 </a>
             </div>
@@ -452,20 +450,16 @@
     </div>
 
     <script>
+        // 點擊選擇功能
+        let selectedItem = null;
 
-
-        // 拖拽功能
-        let draggedElement = null;
-        let isDragging = false;
-        let isTouchDevice = 'ontouchstart' in window;
-
-        // 統一的拖拽處理函數
-        function handleDrop(targetBox, draggedItem) {
-            if (!targetBox || !draggedItem) return false;
+        // 處理答案放置的函數
+        function placeAnswer(targetBox, selectedAnswer) {
+            if (!targetBox || !selectedAnswer) return false;
             
             // 檢查是否匹配
-            const itemOrganism = draggedItem.dataset.organism;
-            const itemType = draggedItem.dataset.type;
+            const itemOrganism = selectedAnswer.dataset.organism;
+            const itemType = selectedAnswer.dataset.type;
             const boxOrganism = targetBox.dataset.organism;
             const boxScale = targetBox.dataset.scale;
 
@@ -476,7 +470,7 @@
                 
                 // 添加描述文字
                 const description = document.createElement('div');
-                description.textContent = draggedItem.textContent;
+                description.textContent = selectedAnswer.textContent;
                 description.style.textAlign = 'center';
                 description.style.fontSize = '0.9rem';
                 description.style.color = '#2d3748';
@@ -484,142 +478,109 @@
                 targetBox.appendChild(description);
                 
                 // 隱藏原始項目
-                draggedItem.style.display = 'none';
+                selectedAnswer.style.display = 'none';
                 targetBox.dataset.filled = 'true';
                 targetBox.dataset.correct = 'true';
+                
+                // 成功放置的視覺反饋
+                targetBox.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    targetBox.style.transform = '';
+                }, 300);
+                
                 return true;
+            } else {
+                // 錯誤放置的視覺反饋
+                targetBox.style.background = '#fed7d7';
+                setTimeout(() => {
+                    if (targetBox.classList.contains('macro')) {
+                        targetBox.style.background = '#fef5e7';
+                    } else {
+                        targetBox.style.background = '#e6fffa';
+                    }
+                }, 500);
+                return false;
             }
-            return false;
         }
 
-        // 為每個拖拽項目添加事件監聽器
-        document.querySelectorAll('.draggable-item').forEach(item => {
-            // 桌面拖拽事件
-            if (!isTouchDevice) {
-                item.addEventListener('dragstart', (e) => {
-                    draggedElement = e.target;
-                    e.target.classList.add('dragging');
-                });
-
-                item.addEventListener('dragend', (e) => {
-                    e.target.classList.remove('dragging');
-                });
-            }
-
-            // 觸控事件 - 適用於所有觸控設備包括iPad
-            item.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                draggedElement = e.target;
-                isDragging = true;
-                e.target.classList.add('dragging');
-                
-                // 添加視覺反饋
-                e.target.style.transform = 'scale(1.05)';
-                e.target.style.zIndex = '1000';
-            }, { passive: false });
-
-            item.addEventListener('touchmove', (e) => {
-                if (!isDragging || !draggedElement) return;
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const touch = e.touches[0];
-                
-                // 清除所有 drag-over 效果
-                document.querySelectorAll('.scale-box').forEach(box => {
-                    box.classList.remove('drag-over');
-                });
-                
-                // 找到觸摸點下的元素
-                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                const targetBox = elementBelow ? elementBelow.closest('.scale-box') : null;
-                
-                if (targetBox) {
-                    targetBox.classList.add('drag-over');
-                }
-            }, { passive: false });
-
-            item.addEventListener('touchend', (e) => {
-                if (!isDragging || !draggedElement) return;
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const touch = e.changedTouches[0];
-                
-                // 重置視覺效果
-                draggedElement.style.transform = '';
-                draggedElement.style.zIndex = '';
-                draggedElement.classList.remove('dragging');
-                
-                // 清除所有 drag-over 效果
-                document.querySelectorAll('.scale-box').forEach(box => {
-                    box.classList.remove('drag-over');
-                });
-                
-                // 找到放置目標
-                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                const targetBox = elementBelow ? elementBelow.closest('.scale-box') : null;
-                
-                if (targetBox) {
-                    const success = handleDrop(targetBox, draggedElement);
-                    if (success) {
-                        // 成功放置的視覺反饋
-                        targetBox.style.transform = 'scale(1.05)';
-                        setTimeout(() => {
-                            targetBox.style.transform = '';
-                        }, 200);
-                    }
-                }
-                
-                isDragging = false;
-                draggedElement = null;
-            }, { passive: false });
-
-            // 點擊事件作為備用方案
+        // 為每個答案選項添加點擊事件
+        document.querySelectorAll('.clickable-item').forEach(item => {
             item.addEventListener('click', (e) => {
-                if (isTouchDevice) return; // 觸控設備使用觸控事件
+                // 如果項目已經被使用，不允許選擇
+                if (item.style.display === 'none') return;
                 
-                // 簡單的點擊選擇機制
-                document.querySelectorAll('.draggable-item').forEach(i => i.classList.remove('selected'));
-                e.target.classList.add('selected');
-                draggedElement = e.target;
+                // 清除之前的選擇
+                document.querySelectorAll('.clickable-item').forEach(i => i.classList.remove('selected'));
+                
+                // 選擇當前項目
+                item.classList.add('selected');
+                selectedItem = item;
+                
+                // 添加提示文字
+                const feedback = document.getElementById('drag-feedback');
+                feedback.style.display = 'block';
+                feedback.className = 'feedback';
+                feedback.style.background = '#e6fffa';
+                feedback.style.color = '#2d3748';
+                feedback.style.border = '1px solid #38b2ac';
+                feedback.textContent = '✨ 已選擇答案，現在請點擊對應的格子來放入答案！';
             });
         });
 
-        // 答案格事件處理
+        // 為每個答案格添加點擊事件
         document.querySelectorAll('.scale-box').forEach(box => {
-            // 桌面拖拽事件
-            if (!isTouchDevice) {
-                box.addEventListener('dragover', (e) => {
-                    e.preventDefault();
+            box.addEventListener('click', (e) => {
+                // 如果格子已經填入答案，不允許再次點擊
+                if (box.dataset.filled === 'true') return;
+                
+                if (selectedItem) {
+                    const success = placeAnswer(box, selectedItem);
+                    if (success) {
+                        // 清除選擇狀態
+                        selectedItem.classList.remove('selected');
+                        selectedItem = null;
+                        
+                        // 更新提示
+                        const feedback = document.getElementById('drag-feedback');
+                        feedback.style.display = 'block';
+                        feedback.className = 'feedback correct';
+                        feedback.textContent = '✅ 答案放置成功！請繼續選擇其他答案。';
+                        
+                        // 3秒後隱藏提示
+                        setTimeout(() => {
+                            if (feedback.className === 'feedback correct') {
+                                feedback.style.display = 'none';
+                            }
+                        }, 3000);
+                    } else {
+                        // 錯誤提示
+                        const feedback = document.getElementById('drag-feedback');
+                        feedback.style.display = 'block';
+                        feedback.className = 'feedback incorrect';
+                        feedback.textContent = '❌ 答案不匹配！請檢查生物種類和觀察尺度是否對應。';
+                    }
+                } else {
+                    // 沒有選擇答案的提示
+                    const feedback = document.getElementById('drag-feedback');
+                    feedback.style.display = 'block';
+                    feedback.className = 'feedback';
+                    feedback.style.background = '#fef5e7';
+                    feedback.style.color = '#2d3748';
+                    feedback.style.border = '1px solid #f6ad55';
+                    feedback.textContent = '⚠️ 請先點選一個描述答案！';
+                }
+            });
+            
+            // 滑鼠懸停效果
+            box.addEventListener('mouseenter', (e) => {
+                if (selectedItem && box.dataset.filled !== 'true') {
                     box.classList.add('drag-over');
-                });
-
-                box.addEventListener('dragleave', (e) => {
-                    box.classList.remove('drag-over');
-                });
-
-                box.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    box.classList.remove('drag-over');
-                    
-                    if (draggedElement) {
-                        handleDrop(box, draggedElement);
-                    }
-                });
-
-                // 點擊事件作為備用方案
-                box.addEventListener('click', (e) => {
-                    if (draggedElement && draggedElement.classList.contains('selected')) {
-                        const success = handleDrop(box, draggedElement);
-                        if (success) {
-                            document.querySelectorAll('.draggable-item').forEach(i => i.classList.remove('selected'));
-                            draggedElement = null;
-                        }
-                    }
-                });
-            }
+                }
+            });
+            
+            box.addEventListener('mouseleave', (e) => {
+                box.classList.remove('drag-over');
+            });
         });
 
         function checkDragDrop() {
@@ -641,11 +602,9 @@
                 feedback.textContent = '🎉 完美！所有配對都正確！您已經掌握了巨觀與微觀觀察的差異。';
             } else {
                 feedback.className = 'feedback incorrect';
-                feedback.textContent = `還需要努力！目前正確配對：${correct}/${total}。請將描述拖拽到對應的生物和尺度格子中。`;
+                feedback.textContent = `還需要努力！目前正確配對：${correct}/${total}。請先點選描述，再點擊對應的生物和尺度格子。`;
             }
         }
-
-
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984966a942ac841e',t:'MTc1ODc5MTU1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984e6cf3941d4a3f',t:'MTc1ODg0NDI0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
