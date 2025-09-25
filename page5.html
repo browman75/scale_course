@@ -94,6 +94,18 @@
             font-size: 1.1rem;
         }
         
+        .questions-row, .answers-row {
+            margin: 30px 0;
+        }
+        
+        .question-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
         .drag-container {
             display: flex;
             flex-wrap: wrap;
@@ -189,6 +201,61 @@
             background: #ffebee;
         }
         
+        .choice-item.selected {
+            border-color: #2196f3;
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76,175,80,0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .nav-btn {
+            background: #2196f3;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #1976d2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(33,150,243,0.3);
+        }
+        
         .choice-icon {
             font-size: 3rem;
             margin-bottom: 10px;
@@ -281,40 +348,45 @@
             <div class="exercise-section">
                 <div class="exercise-title">🔬 拖曳題練習</div>
                 
-                <div class="question">
-                    <div class="question-text">1. 巨觀尺度的觀察</div>
-                    
-                    <div class="question-text">Q: 如何從巨觀尺度觀察？</div>
-                    <div class="drop-zone" data-answer="以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。">
-                        將答案拖曳到這裡
+                <div class="questions-row">
+                    <div class="question-text">題目：</div>
+                    <div class="question-item">
+                        <strong>1. 巨觀尺度的觀察</strong><br>
+                        Q: 如何從巨觀尺度觀察？
+                        <div class="drop-zone" data-answer="以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。">
+                            將答案拖曳到這裡
+                        </div>
                     </div>
-                    
-                    <div class="question-text">Q: 從巨觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因為何？</div>
-                    <div class="drop-zone" data-answer="因為羽毛排列十分整齊，不易被風吹動">
-                        將答案拖曳到這裡
+                    <div class="question-item">
+                        Q: 從巨觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因為何？
+                        <div class="drop-zone" data-answer="因為羽毛排列十分整齊，不易被風吹動">
+                            將答案拖曳到這裡
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <strong>2. 微觀尺度的觀察</strong><br>
+                        Q: 如何從微觀尺度觀察？
+                        <div class="drop-zone" data-answer="使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。">
+                            將答案拖曳到這裡
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        Q: 從微觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因為何？
+                        <div class="drop-zone" data-answer="因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。">
+                            將答案拖曳到這裡
+                        </div>
                     </div>
                 </div>
                 
-                <div class="question">
-                    <div class="question-text">2. 微觀尺度的觀察</div>
-                    
-                    <div class="question-text">Q: 如何從微觀尺度觀察？</div>
-                    <div class="drop-zone" data-answer="使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。">
-                        將答案拖曳到這裡
+                <div class="answers-row">
+                    <div class="question-text">答案：</div>
+                    <div class="drag-container">
+                        <div class="draggable" draggable="true">以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。</div>
+                        <div class="draggable" draggable="true">因為羽毛排列十分整齊，不易被風吹動</div>
+                        <div class="draggable" draggable="true">因為羽毛看起來很硬，不易被風吹動</div>
+                        <div class="draggable" draggable="true">使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。</div>
+                        <div class="draggable" draggable="true">因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。</div>
                     </div>
-                    
-                    <div class="question-text">Q: 從微觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因為何？</div>
-                    <div class="drop-zone" data-answer="因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。">
-                        將答案拖曳到這裡
-                    </div>
-                </div>
-                
-                <div class="drag-container">
-                    <div class="draggable" draggable="true">以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。</div>
-                    <div class="draggable" draggable="true">因為羽毛排列十分整齊，不易被風吹動</div>
-                    <div class="draggable" draggable="true">因為羽毛看起來很硬，不易被風吹動</div>
-                    <div class="draggable" draggable="true">使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。</div>
-                    <div class="draggable" draggable="true">因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。</div>
                 </div>
                 
                 <button class="reset-btn" onclick="resetDragDrop()">🔄 重新開始</button>
@@ -327,7 +399,7 @@
                     <div class="question-text">Q: 日常生活中，有什麼物品或裝置和羽毛不被風吹亂的結構雷同呢？</div>
                     
                     <div class="choices">
-                        <div class="choice-item" onclick="selectChoice(this, true)">
+                        <div class="choice-item" onclick="selectChoice(this, 'velcro')">
                             <div class="choice-icon">🔗</div>
                             <div class="choice-text">魔鬼氈</div>
                             <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">
@@ -335,7 +407,7 @@
                             </div>
                         </div>
                         
-                        <div class="choice-item" onclick="selectChoice(this, false)">
+                        <div class="choice-item" onclick="selectChoice(this, 'glue')">
                             <div class="choice-icon">🧴</div>
                             <div class="choice-text">膠水</div>
                             <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">
@@ -343,7 +415,7 @@
                             </div>
                         </div>
                         
-                        <div class="choice-item" onclick="selectChoice(this, false)">
+                        <div class="choice-item" onclick="selectChoice(this, 'tape')">
                             <div class="choice-icon">📏</div>
                             <div class="choice-text">膠帶</div>
                             <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">
@@ -352,22 +424,17 @@
                         </div>
                     </div>
                     
+                    <button class="submit-btn" onclick="submitAnswer()" id="submitBtn" disabled>提交答案</button>
+                    
                     <div class="feedback" id="choiceFeedback"></div>
                 </div>
             </div>
-            <div class="section">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <a href="page4.html" target="_blank" rel="noopener noreferrer" class="nav-button prev-button">
-                    ← 上一頁
-                </a>
-                <a href="index.html" target="_blank" rel="noopener noreferrer" class="nav-button home-button">
-                    🏠 回到首頁
-                </a>
-                <a href="page6.html" target="_blank" rel="noopener noreferrer" class="nav-button next-button">
-                    下一頁 →
-                </a>
-            </div>
         </div>
+        
+        <div class="navigation">
+            <a href="page4.html" class="nav-btn">上一頁</a>
+            <a href="index.html" class="nav-btn">回到首頁</a>
+            <a href="page6.html" class="nav-btn">下一頁</a>
         </div>
     </div>
 
@@ -442,25 +509,43 @@
         }
 
         // 選擇題功能
-        let choiceSelected = false;
+        let selectedAnswer = null;
+        let answerSubmitted = false;
 
-        function selectChoice(element, isCorrect) {
-            if (choiceSelected) return;
+        function selectChoice(element, answerType) {
+            if (answerSubmitted) return;
             
-            choiceSelected = true;
+            // 移除所有選項的選中狀態
+            document.querySelectorAll('.choice-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // 選中當前選項
+            element.classList.add('selected');
+            selectedAnswer = answerType;
+            
+            // 啟用提交按鈕
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (!selectedAnswer || answerSubmitted) return;
+            
+            answerSubmitted = true;
             const feedback = document.getElementById('choiceFeedback');
             
-            // 重置所有選項
+            // 禁用所有選項和提交按鈕
             document.querySelectorAll('.choice-item').forEach(item => {
                 item.style.pointerEvents = 'none';
             });
+            document.getElementById('submitBtn').disabled = true;
             
-            if (isCorrect) {
-                element.classList.add('correct');
+            if (selectedAnswer === 'velcro') {
+                document.querySelector('.choice-item.selected').classList.add('correct');
                 feedback.textContent = '🎉 正確！魔鬼氈的結構確實和羽毛的倒鉤結構相似，都是透過細小的鉤子互相連接。';
                 feedback.classList.add('correct');
             } else {
-                element.classList.add('incorrect');
+                document.querySelector('.choice-item.selected').classList.add('incorrect');
                 // 顯示正確答案
                 document.querySelectorAll('.choice-item').forEach(item => {
                     if (item.textContent.includes('魔鬼氈')) {
@@ -473,15 +558,17 @@
             
             feedback.classList.add('show');
             
-            // 3秒後重置
+            // 5秒後重置
             setTimeout(() => {
-                choiceSelected = false;
+                answerSubmitted = false;
+                selectedAnswer = null;
                 document.querySelectorAll('.choice-item').forEach(item => {
-                    item.classList.remove('correct', 'incorrect');
+                    item.classList.remove('correct', 'incorrect', 'selected');
                     item.style.pointerEvents = 'auto';
                 });
                 feedback.classList.remove('show', 'correct', 'incorrect');
-            }, 4000);
+                document.getElementById('submitBtn').disabled = true;
+            }, 5000);
         }
 
         // 添加CSS動畫
@@ -501,5 +588,5 @@
         `;
         document.head.appendChild(style);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9848bc68c1eaa9bc',t:'MTc1ODc4NDU4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9848ca4191b44a51',t:'MTc1ODc4NTE1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
