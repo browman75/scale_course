@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微觀尺度的重要性</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #2d3748;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: #e6fffa;
+            border-color: #38b2ac;
+        }
+
+        .option input[type="checkbox"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .drag-drop-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .items-pool {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .items-pool h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .draggable-item {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .draggable-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .matching-area {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .organism {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .organism h4 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .scale-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .scale-box {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .scale-box.macro {
+            background: #fef5e7;
+            border-color: #f6ad55;
+        }
+
+        .scale-box.micro {
+            background: #e6fffa;
+            border-color: #38b2ac;
+        }
+
+        .scale-box.drag-over {
+            border-style: solid;
+            transform: scale(1.02);
+        }
+
+        .scale-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+
+        .image-placeholder {
+            width: 60px;
+            height: 60px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 8px 0;
+            font-size: 2rem;
+        }
+
+        .check-button {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .check-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .prev-button {
+            background: linear-gradient(45deg, #4299e1, #3182ce);
+            color: white;
+        }
+
+        .prev-button:hover {
+            background: linear-gradient(45deg, #3182ce, #2c5282);
+            transform: translateY(-2px);
+        }
+
+        .home-button {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+        }
+
+        .home-button:hover {
+            background: linear-gradient(45deg, #38a169, #2f855a);
+            transform: translateY(-2px);
+        }
+
+        .next-button {
+            background: linear-gradient(45deg, #ed8936, #dd6b20);
+            color: white;
+        }
+
+        .next-button:hover {
+            background: linear-gradient(45deg, #dd6b20, #c05621);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .scale-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+
+            .section div[style*="flex"] {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            .nav-button {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 微觀尺度的重要性</h1>
+        </div>
+
+
+
+        <div class="section">
+            <h2>📝 勾選正確的選項</h2>
+            <div class="quiz-container">
+                <div class="question">
+                    從不同尺度觀察自然界事物時，可能會發現什麼？（複選題）
+                </div>
+                <div class="options">
+                    <label class="option">
+                        <input type="checkbox" value="A">
+                        <span>不同的結構特徵和組成方式</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" value="B">
+                        <span>相同的外觀和功能表現</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" value="C">
+                        <span>可能進一步解釋其科學原理</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" value="D">
+                        <span>巨觀和微觀無法解釋同一個現象</span>
+                    </label>
+                </div>
+                <button class="check-button" onclick="checkQuiz()">檢查答案</button>
+                <div id="quiz-feedback" class="feedback" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 拖曳正確的描述</h2>
+            <p class="intro-text">將巨觀與微觀的描述拖曳到正確的格子內：</p>
+            
+            <div class="drag-drop-container">
+                <div class="items-pool">
+                    <h3>📋 描述選項</h3>
+                    <div class="draggable-item" draggable="true" data-type="micro" data-organism="lotus">
+                        有許多細小的突起，能夠隔離雜質和水
+                    </div>
+                    <div class="draggable-item" draggable="true" data-type="macro" data-organism="insect">
+                        一顆圓形的眼睛
+                    </div>
+                    <div class="draggable-item" draggable="true" data-type="micro" data-organism="salvinia">
+                        表面的毛狀構造能夠隔離水
+                    </div>
+                    <div class="draggable-item" draggable="true" data-type="macro" data-organism="lotus">
+                        有平坦的表面
+                    </div>
+                    <div class="draggable-item" draggable="true" data-type="micro" data-organism="insect">
+                        複眼是由許多六角形的小眼所組成
+                    </div>
+                    <div class="draggable-item" draggable="true" data-type="macro" data-organism="salvinia">
+                        表面有毛狀構造
+                    </div>
+                </div>
+
+                <div class="matching-area">
+                    <div class="organism">
+                        <h4>🐛 昆蟲的複眼</h4>
+                        <div class="scale-comparison">
+                            <div class="scale-box macro" data-organism="insect" data-scale="macro">
+                                <div class="scale-label">巨觀</div>
+                                <div class="image-placeholder">👁️</div>
+                                <div class="drop-text">拖曳描述到這裡</div>
+                            </div>
+                            <div class="scale-box micro" data-organism="insect" data-scale="micro">
+                                <div class="scale-label">微觀</div>
+                                <div class="image-placeholder">🔬</div>
+                                <div class="drop-text">拖曳描述到這裡</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="organism">
+                        <h4>🌿 槐葉蘋的葉面</h4>
+                        <div class="scale-comparison">
+                            <div class="scale-box macro" data-organism="salvinia" data-scale="macro">
+                                <div class="scale-label">巨觀</div>
+                                <div class="image-placeholder">🍃</div>
+                                <div class="drop-text">拖曳描述到這裡</div>
+                            </div>
+                            <div class="scale-box micro" data-organism="salvinia" data-scale="micro">
+                                <div class="scale-label">微觀</div>
+                                <div class="image-placeholder">🔬</div>
+                                <div class="drop-text">拖曳描述到這裡</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="organism">
+                        <h4>🪷 蓮花的葉面</h4>
+                        <div class="scale-comparison">
+                            <div class="scale-box macro" data-organism="lotus" data-scale="macro">
+                                <div class="scale-label">巨觀</div>
+                                <div class="image-placeholder">🪷</div>
+                                <div class="drop-text">拖曳描述到這裡</div>
+                            </div>
+                            <div class="scale-box micro" data-organism="lotus" data-scale="micro">
+                                <div class="scale-label">微觀</div>
+                                <div class="image-placeholder">🔬</div>
+                                <div class="drop-text">拖曳描述到這裡</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="check-button" onclick="checkDragDrop()">檢查配對結果</button>
+            <div id="drag-feedback" class="feedback" style="display: none;"></div>
+        </div>
+
+        <div class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <a href="page2.html" target="_blank" rel="noopener noreferrer" class="nav-button prev-button">
+                    ← 上一頁
+                </a>
+                <a href="index.html" target="_blank" rel="noopener noreferrer" class="nav-button home-button">
+                    🏠 回到首頁
+                </a>
+                <a href="page4.html" target="_blank" rel="noopener noreferrer" class="nav-button next-button">
+                    下一頁 →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 複選題功能
+        function checkQuiz() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const selected = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) selected.push(cb.value);
+            });
+
+            const correct = ['A', 'C'];
+            const feedback = document.getElementById('quiz-feedback');
+            
+            const isCorrect = correct.length === selected.length && 
+                            correct.every(val => selected.includes(val));
+
+            feedback.style.display = 'block';
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '🎉 答對了！從不同尺度觀察確實能發現不同的結構特徵和組成方式，並可能進一步解釋其科學原理。';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = '❌ 請再試試看！正確答案是：不同的結構特徵和組成方式、可能進一步解釋其科學原理。';
+            }
+        }
+
+        // 拖拽功能
+        let draggedElement = null;
+
+        document.querySelectorAll('.draggable-item').forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                draggedElement = e.target;
+                e.target.classList.add('dragging');
+            });
+
+            item.addEventListener('dragend', (e) => {
+                e.target.classList.remove('dragging');
+            });
+        });
+
+        document.querySelectorAll('.scale-box').forEach(box => {
+            box.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                box.classList.add('drag-over');
+            });
+
+            box.addEventListener('dragleave', (e) => {
+                box.classList.remove('drag-over');
+            });
+
+            box.addEventListener('drop', (e) => {
+                e.preventDefault();
+                box.classList.remove('drag-over');
+                
+                if (draggedElement) {
+                    // 檢查是否匹配
+                    const itemOrganism = draggedElement.dataset.organism;
+                    const itemType = draggedElement.dataset.type;
+                    const boxOrganism = box.dataset.organism;
+                    const boxScale = box.dataset.scale;
+
+                    if (itemOrganism === boxOrganism && itemType === boxScale) {
+                        // 清除原有內容
+                        const dropText = box.querySelector('.drop-text');
+                        if (dropText) dropText.remove();
+                        
+                        // 添加描述文字
+                        const description = document.createElement('div');
+                        description.textContent = draggedElement.textContent;
+                        description.style.textAlign = 'center';
+                        description.style.fontSize = '0.9rem';
+                        description.style.color = '#2d3748';
+                        description.style.fontWeight = '500';
+                        box.appendChild(description);
+                        
+                        // 隱藏原始項目
+                        draggedElement.style.display = 'none';
+                        box.dataset.filled = 'true';
+                        box.dataset.correct = 'true';
+                    }
+                }
+            });
+        });
+
+        function checkDragDrop() {
+            const boxes = document.querySelectorAll('.scale-box');
+            let correct = 0;
+            let total = boxes.length;
+
+            boxes.forEach(box => {
+                if (box.dataset.correct === 'true') {
+                    correct++;
+                }
+            });
+
+            const feedback = document.getElementById('drag-feedback');
+            feedback.style.display = 'block';
+
+            if (correct === total) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '🎉 完美！所有配對都正確！您已經掌握了巨觀與微觀觀察的差異。';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `還需要努力！目前正確配對：${correct}/${total}。請將描述拖拽到對應的生物和尺度格子中。`;
+            }
+        }
+
+        // 選項點擊效果
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = option.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                }
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                option.classList.toggle('selected', checkbox.checked);
+            });
+        });
+
+        // 直接點擊複選框的處理
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const option = e.target.closest('.option');
+                option.classList.toggle('selected', e.target.checked);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9847e03962af4a39',t:'MTc1ODc3NTU2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
