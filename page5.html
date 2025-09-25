@@ -478,7 +478,11 @@
     <script>
         // 拖曳功能
         let draggedElement = null;
+        let touchStartPos = { x: 0, y: 0 };
+        let isDragging = false;
+        let dragClone = null;
 
+        // 桌面拖曳事件
         document.querySelectorAll('.draggable').forEach(item => {
             item.addEventListener('dragstart', function(e) {
                 draggedElement = this;
@@ -488,6 +492,103 @@
 
             item.addEventListener('dragend', function(e) {
                 this.classList.remove('dragging');
+            });
+
+            // 觸控事件 - iPad支援
+            item.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                touchStartPos = { x: touch.clientX, y: touch.clientY };
+                draggedElement = this;
+                isDragging = false;
+            });
+
+            item.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const deltaX = Math.abs(touch.clientX - touchStartPos.x);
+                const deltaY = Math.abs(touch.clientY - touchStartPos.y);
+                
+                if (!isDragging && (deltaX > 10 || deltaY > 10)) {
+                    isDragging = true;
+                    this.classList.add('dragging');
+                    
+                    // 創建拖曳複製元素
+                    dragClone = this.cloneNode(true);
+                    dragClone.style.position = 'fixed';
+                    dragClone.style.zIndex = '1000';
+                    dragClone.style.pointerEvents = 'none';
+                    dragClone.style.opacity = '0.8';
+                    dragClone.style.transform = 'rotate(5deg) scale(0.95)';
+                    document.body.appendChild(dragClone);
+                }
+                
+                if (isDragging && dragClone) {
+                    dragClone.style.left = (touch.clientX - 50) + 'px';
+                    dragClone.style.top = (touch.clientY - 30) + 'px';
+                    
+                    // 檢查是否在放置區域上方
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const dropZone = elementBelow?.closest('.drop-zone');
+                    
+                    // 移除所有拖曳懸停效果
+                    document.querySelectorAll('.drop-zone').forEach(zone => {
+                        zone.classList.remove('drag-over');
+                    });
+                    
+                    // 添加懸停效果到當前區域
+                    if (dropZone) {
+                        dropZone.classList.add('drag-over');
+                    }
+                }
+            });
+
+            item.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                
+                if (isDragging) {
+                    const touch = e.changedTouches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const dropZone = elementBelow?.closest('.drop-zone');
+                    
+                    if (dropZone && draggedElement) {
+                        const correctAnswer = dropZone.dataset.answer;
+                        const droppedText = draggedElement.textContent.trim();
+                        
+                        if (droppedText === correctAnswer) {
+                            dropZone.textContent = droppedText;
+                            dropZone.classList.add('filled');
+                            draggedElement.style.display = 'none';
+                            
+                            // 添加成功動畫
+                            dropZone.style.animation = 'pulse 0.6s ease-in-out';
+                            setTimeout(() => {
+                                dropZone.style.animation = '';
+                            }, 600);
+                        } else {
+                            // 錯誤回饋
+                            dropZone.style.animation = 'shake 0.5s ease-in-out';
+                            setTimeout(() => {
+                                dropZone.style.animation = '';
+                            }, 500);
+                        }
+                    }
+                    
+                    // 清理
+                    this.classList.remove('dragging');
+                    if (dragClone) {
+                        document.body.removeChild(dragClone);
+                        dragClone = null;
+                    }
+                    
+                    // 移除所有懸停效果
+                    document.querySelectorAll('.drop-zone').forEach(zone => {
+                        zone.classList.remove('drag-over');
+                    });
+                }
+                
+                isDragging = false;
+                draggedElement = null;
             });
         });
 
@@ -625,5 +726,5 @@
         `;
         document.head.appendChild(style);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9848daf442ed6a99',t:'MTc1ODc4NTgzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9848e752069880a3',t:'MTc1ODc4NjM0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
