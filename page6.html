@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尺度的表示方式</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        
+        .explanation {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .quiz-section {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #e2e8f0;
+        }
+        
+        .quiz-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+        
+        .option.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+            color: #22543d;
+        }
+        
+        .option.incorrect {
+            border-color: #f56565;
+            background: #fff5f5;
+            color: #742a2a;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+        
+        .feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .feedback.correct {
+            background: #f0fff4;
+            color: #22543d;
+            border: 2px solid #48bb78;
+        }
+        
+        .feedback.special {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #744210;
+            border: 2px solid #ed8936;
+        }
+        
+        .reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .hair-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding: 20px 0;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3);
+        }
+        
+        .prev-btn {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+        }
+        
+        .prev-btn:hover {
+            box-shadow: 0 5px 15px rgba(237, 137, 54, 0.3);
+        }
+        
+        .home-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+        
+        .home-btn:hover {
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+        }
+        
+        .next-btn {
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+        }
+        
+        .next-btn:hover {
+            box-shadow: 0 5px 15px rgba(159, 122, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">📏 尺度的表示方式</h1>
+        </div>
+        
+        <div class="explanation">
+            表示尺度時，須包含「數字」及「單位」兩部分，且對應不同尺度，各有適用的單位。
+        </div>
+        
+        <div class="quiz-section">
+            <h2 class="quiz-title">💇‍♀️ 頭髮長度適合的表示方式</h2>
+            
+            <div class="option" onclick="selectOption(this, 'special')">
+                <span class="hair-icon">🌟</span>
+                我的頭髮566
+            </div>
+            
+            <div class="option" onclick="selectOption(this, 'incorrect')">
+                <span class="hair-icon">💫</span>
+                我的頭髮12
+            </div>
+            
+            <div class="option" onclick="selectOption(this, 'correct')">
+                <span class="hair-icon">✨</span>
+                我的頭髮12公分
+            </div>
+            
+            <div class="option" onclick="selectOption(this, 'incorrect')">
+                <span class="hair-icon">🎯</span>
+                我的頭髮120毫米
+            </div>
+            
+            <div class="option" onclick="selectOption(this, 'incorrect')">
+                <span class="hair-icon">📐</span>
+                我的頭髮0.12公尺
+            </div>
+            
+            <div class="option" onclick="selectOption(this, 'incorrect')">
+                <span class="hair-icon">🗺️</span>
+                我的頭髮0.012公里
+            </div>
+            
+            <div id="feedback" class="feedback"></div>
+            
+            <div style="text-align: center;">
+                <button class="reset-btn" onclick="resetQuiz()">重新開始</button>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="page5.html" class="nav-btn prev-btn">上一頁</a>
+            <a href="index.html" class="nav-btn home-btn">回到首頁</a>
+            <a href="page7.html" class="nav-btn next-btn">下一頁</a>
+        </div>
+    </div>
+
+    <script>
+        let answered = false;
+        
+        function selectOption(element, type) {
+            if (answered) return;
+            
+            // Remove previous selections
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            element.classList.add('selected');
+            
+            // Show feedback based on selection
+            const feedback = document.getElementById('feedback');
+            
+            if (type === 'correct') {
+                element.classList.add('correct');
+                feedback.textContent = '🎉 正確！12公分是表示頭髮長度最適合的方式，包含了數字和適當的單位。';
+                feedback.className = 'feedback correct show';
+            } else if (type === 'special') {
+                element.classList.add('incorrect');
+                feedback.textContent = '😊 你的頭髮真柔順！不過這個表示方式缺少了單位喔～';
+                feedback.className = 'feedback special show';
+            } else {
+                element.classList.add('incorrect');
+                if (element.textContent.includes('我的頭髮12')) {
+                    feedback.textContent = '🤔 12根嗎？給個單位吧～';
+                } else {
+                    feedback.textContent = '❌ 雖然數學上正確，但這個單位不太適合用來表示頭髮長度。試試看其他選項！';
+                }
+                feedback.className = 'feedback show';
+                feedback.style.background = '#fff5f5';
+                feedback.style.color = '#742a2a';
+                feedback.style.border = '2px solid #f56565';
+            }
+            
+            answered = true;
+        }
+        
+        function resetQuiz() {
+            answered = false;
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('show');
+            
+            setTimeout(() => {
+                feedback.textContent = '';
+                feedback.className = 'feedback';
+            }, 300);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984a1908c68b833e',t:'MTc1ODc5ODg2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
