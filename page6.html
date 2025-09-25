@@ -285,15 +285,11 @@
                 feedback.className = 'feedback special show';
             } else if (type === 'special') {
                 element.classList.add('incorrect');
-                feedback.textContent = '😊 你的頭髮真柔順！不過這個表示方式缺少了單位喔～';
+                feedback.textContent = '🤔 12根嗎？給個單位吧～';
                 feedback.className = 'feedback special show';
             }else {
                 element.classList.add('incorrect');
-                if (element.textContent.includes('我的頭髮12')) {
-                    feedback.textContent = '🤔 12根嗎？給個單位吧～';
-                } else {
-                    feedback.textContent = '❌ 雖然數學上正確，但這個單位不太適合用來表示頭髮長度。試試看其他選項！';
-                }
+                feedback.textContent = '❌ 雖然數學上正確，但這個單位不太適合用來表示頭髮長度。試試看其他選項！';
                 feedback.className = 'feedback show';
                 feedback.style.background = '#fff5f5';
                 feedback.style.color = '#742a2a';
