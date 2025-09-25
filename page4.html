@@ -357,6 +357,10 @@
             <h1>🔬 微觀尺度的重要性</h1>
         </div>
 
+
+
+
+
         <div class="section">
             <h2>🎯 拖曳正確的描述</h2>
             <p class="intro-text">將巨觀與微觀的描述拖曳到正確的格子內：</p>
@@ -442,7 +446,9 @@
     </div>
 
     <script>
-        // 拖拽功能 (桌面版)
+
+
+        // 拖拽功能
         let draggedElement = null;
 
         document.querySelectorAll('.draggable-item').forEach(item => {
@@ -471,69 +477,34 @@
                 box.classList.remove('drag-over');
                 
                 if (draggedElement) {
-                    handleDrop(draggedElement, box);
+                    // 檢查是否匹配
+                    const itemOrganism = draggedElement.dataset.organism;
+                    const itemType = draggedElement.dataset.type;
+                    const boxOrganism = box.dataset.organism;
+                    const boxScale = box.dataset.scale;
+
+                    if (itemOrganism === boxOrganism && itemType === boxScale) {
+                        // 清除原有內容
+                        const dropText = box.querySelector('.drop-text');
+                        if (dropText) dropText.remove();
+                        
+                        // 添加描述文字
+                        const description = document.createElement('div');
+                        description.textContent = draggedElement.textContent;
+                        description.style.textAlign = 'center';
+                        description.style.fontSize = '0.9rem';
+                        description.style.color = '#2d3748';
+                        description.style.fontWeight = '500';
+                        box.appendChild(description);
+                        
+                        // 隱藏原始項目
+                        draggedElement.style.display = 'none';
+                        box.dataset.filled = 'true';
+                        box.dataset.correct = 'true';
+                    }
                 }
             });
         });
-
-        // iPad/iPhone 觸控拖曳
-        document.querySelectorAll('.draggable-item').forEach(item => {
-            item.addEventListener('touchstart', (e) => {
-                draggedElement = e.target;
-                draggedElement.classList.add('dragging');
-            });
-
-            item.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                draggedElement.style.position = 'fixed';
-                draggedElement.style.left = touch.clientX - draggedElement.offsetWidth / 2 + 'px';
-                draggedElement.style.top = touch.clientY - draggedElement.offsetHeight / 2 + 'px';
-                draggedElement.style.zIndex = 1000;
-            });
-
-            item.addEventListener('touchend', (e) => {
-                draggedElement.classList.remove('dragging');
-                const touch = e.changedTouches[0];
-
-                draggedElement.style.position = '';
-                draggedElement.style.left = '';
-                draggedElement.style.top = '';
-                draggedElement.style.zIndex = '';
-
-                const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
-                const box = dropTarget.closest('.scale-box');
-                if (box) {
-                    handleDrop(draggedElement, box);
-                }
-                draggedElement = null;
-            });
-        });
-
-        // 處理放置邏輯 (共用)
-        function handleDrop(item, box) {
-            const itemOrganism = item.dataset.organism;
-            const itemType = item.dataset.type;
-            const boxOrganism = box.dataset.organism;
-            const boxScale = box.dataset.scale;
-
-            if (itemOrganism === boxOrganism && itemType === boxScale) {
-                const dropText = box.querySelector('.drop-text');
-                if (dropText) dropText.remove();
-
-                const description = document.createElement('div');
-                description.textContent = item.textContent;
-                description.style.textAlign = 'center';
-                description.style.fontSize = '0.9rem';
-                description.style.color = '#2d3748';
-                description.style.fontWeight = '500';
-                box.appendChild(description);
-
-                item.style.display = 'none';
-                box.dataset.filled = 'true';
-                box.dataset.correct = 'true';
-            }
-        }
 
         function checkDragDrop() {
             const boxes = document.querySelectorAll('.scale-box');
@@ -547,4 +518,18 @@
             });
 
             const feedback = document.getElementById('drag-feedback');
-            feedback.style.display
+            feedback.style.display = 'block';
+
+            if (correct === total) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '🎉 完美！所有配對都正確！您已經掌握了巨觀與微觀觀察的差異。';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `還需要努力！目前正確配對：${correct}/${total}。請將描述拖拽到對應的生物和尺度格子中。`;
+            }
+        }
+
+
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98494964d247841e',t:'MTc1ODc5MDM2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
