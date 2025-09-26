@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鳥類飛行羽毛的結構</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .video-section {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .exercise-section {
+            margin: 40px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .exercise-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .question-text {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .scale-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .scale-section {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e3f2fd;
+        }
+        
+        .question-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .drag-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            padding: 10px 0;
+        }
+        
+        .draggable {
+            padding: 15px 20px;
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 15px;
+            cursor: move;
+            user-select: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .draggable.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        
+        .drop-zone {
+            min-height: 60px;
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #fafafa;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #2196f3;
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+        
+        .drop-zone.filled {
+            background: #c8e6c9;
+            border-color: #4caf50;
+            font-style: normal;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        .choice-item {
+            padding: 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: white;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .choice-item.selected {
+            border-color: #2196f3;
+            background: #e3f2fd;
+        }
+        
+        .choice-item.correct {
+            border-color: #4caf50;
+            background: #e8f5e8;
+        }
+        
+        .choice-item.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+        
+        .submit-btn, .reset-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .nav-btn {
+            background: #2196f3;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .nav-btn.enabled {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🪶 鳥類飛行羽毛的結構</h1>
+        </div>
+        
+        <div class="content">
+            <div class="exercise-section">
+                <div class="exercise-title">🔬 拖曳題練習</div>
+                <div class="scale-sections">
+                    <div class="scale-section">
+                        <div class="question-item">
+                            Q1: 如何從巨觀尺度觀察？
+                            <div class="drop-zone" data-answer="👁️ 以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。">將答案拖曳到這裡</div>
+                        </div>
+                        <div class="question-item">
+                            Q2: 從巨觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因？
+                            <div class="drop-zone" data-answer="📐 因為羽毛排列十分整齊，不易被風吹動">將答案拖曳到這裡</div>
+                        </div>
+                    </div>
+                    <div class="scale-section">
+                        <div class="question-item">
+                            Q3: 如何從微觀尺度觀察？
+                            <div class="drop-zone" data-answer="🔬 使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。">將答案拖曳到這裡</div>
+                        </div>
+                        <div class="question-item">
+                            Q4: 從微觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因？
+                            <div class="drop-zone" data-answer="🪝 因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。">將答案拖曳到這裡</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="drag-container">
+                    <div class="draggable" draggable="true">👁️ 以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。</div>
+                    <div class="draggable" draggable="true">📐 因為羽毛排列十分整齊，不易被風吹動</div>
+                    <div class="draggable" draggable="true">🔬 使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。</div>
+                    <div class="draggable" draggable="true">🪝 因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。</div>
+                </div>
+                <button class="reset-btn" onclick="resetDragDrop()">🔄 重新開始</button>
+            </div>
+
+            <div class="exercise-section">
+                <div class="exercise-title">🧩 選擇題</div>
+                <div class="question">
+                    <div class="question-text">Q: 日常生活中，有什麼物品或裝置和羽毛不被風吹亂的結構雷同呢？</div>
+                    <div class="choices">
+                        <div class="choice-item" onclick="selectChoice(this, 'velcro')">
+                            <div>魔鬼氈</div>
+                        </div>
+                        <div class="choice-item" onclick="selectChoice(this, 'glue')">
+                            <div>膠水</div>
+                        </div>
+                        <div class="choice-item" onclick="selectChoice(this, 'tape')">
+                            <div>膠帶</div>
+                        </div>
+                    </div>
+                    <button class="submit-btn" onclick="submitAnswer()" id="submitBtn" disabled>提交答案</button>
+                    <div class="feedback" id="choiceFeedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="page4.html" class="nav-btn enabled">上一頁</a>
+            <a href="index.html" class="nav-btn enabled">回到首頁</a>
+            <a href="page6.html" class="nav-btn" id="nextPageBtn">下一頁</a>
+        </div>
+    </div>
+
+<script>
+let draggedElement = null;
+document.querySelectorAll('.draggable').forEach(item => {
+    item.addEventListener('dragstart', function(e){
+        draggedElement = this;
+    });
+});
+document.querySelectorAll('.drop-zone').forEach(zone=>{
+    zone.addEventListener('dragover', e=>{ e.preventDefault(); });
+    zone.addEventListener('drop', function(e){
+        e.preventDefault();
+        const answer = this.dataset.answer;
+        if(draggedElement && draggedElement.textContent.trim()===answer){
+            this.textContent = answer;
+            this.classList.add('filled');
+            draggedElement.style.display='none';
+            checkAllDragDrop();
+        }
+    });
+});
+
+function resetDragDrop(){
+    document.querySelectorAll('.draggable').forEach(item=>{
+        item.style.display='flex';
+    });
+    document.querySelectorAll('.drop-zone').forEach(zone=>{
+        zone.textContent='將答案拖曳到這裡';
+        zone.classList.remove('filled');
+    });
+    checkAllDragDrop();
+}
+
+// 選擇題
+let selectedAnswer=null;
+let choiceCorrect=false;
+function selectChoice(elem, type){
+    if(selectedAnswer) return;
+    document.querySelectorAll('.choice-item').forEach(i=>i.classList.remove('selected'));
+    elem.classList.add('selected');
+    selectedAnswer=type;
+    document.getElementById('submitBtn').disabled=false;
+}
+
+function submitAnswer(){
+    if(!selectedAnswer) return;
+    choiceCorrect = selectedAnswer==='velcro';
+    const feedback = document.getElementById('choiceFeedback');
+    feedback.textContent = choiceCorrect?'🎉 正確！':'❌ 不正確，正確答案是魔鬼氈';
+    feedback.style.display='block';
+    checkEnableNext();
+}
+
+// 檢查拖曳題是否全答對
+function checkAllDragDrop(){
+    const zones = document.querySelectorAll('.drop-zone');
+    let allFilled=true;
+    zones.forEach(z=>{
+        if(!z.classList.contains('filled')) allFilled=false;
+    });
+    checkEnableNext(allFilled);
+}
+
+// 啟用下一頁按鈕
+function checkEnableNext(allDragDone=false){
+    const nextBtn = document.getElementById('nextPageBtn');
+    if(allDragDone && choiceCorrect){
+        nextBtn.classList.add('enabled');
+    } else {
+        nextBtn.classList.remove('enabled');
+    }
+}
+</script>
+</body>
+</html>
