@@ -59,51 +59,6 @@
             margin-bottom: 20px;
         }
 
-        .quiz-container {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .question {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 20px;
-        }
-
-        .options {
-            display: grid;
-            gap: 15px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: #f7fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .option:hover {
-            background: #edf2f7;
-            border-color: #667eea;
-        }
-
-        .option.selected {
-            background: #e6fffa;
-            border-color: #38b2ac;
-        }
-
-        .option input[type="checkbox"] {
-            margin-right: 12px;
-            transform: scale(1.2);
-        }
-
         .drag-drop-container {
             display: flex;
             flex-direction: column;
@@ -124,6 +79,12 @@
             text-align: center;
         }
 
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
         .clickable-item {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
@@ -139,7 +100,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid transparent;
         }
 
         .clickable-item:hover {
@@ -161,28 +121,9 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .organism {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 10px;
-        }
-
-        .organism h4 {
-            color: #2d3748;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-        }
-
         .boxes-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
 
@@ -190,13 +131,14 @@
             border: 2px dashed #cbd5e0;
             border-radius: 8px;
             padding: 10px;
-            min-height: 100px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
             position: relative;
+            cursor: pointer;
         }
 
         .scale-box.macro {
@@ -220,18 +162,6 @@
             color: #2d3748;
             font-size: 0.8rem;
             text-align: center;
-        }
-
-        .image-placeholder {
-            width: 30px;
-            height: 30px;
-            background: #e2e8f0;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 4px 0;
-            font-size: 1.2rem;
         }
 
         .drop-text {
@@ -312,11 +242,13 @@
         .next-button {
             background: linear-gradient(45deg, #ed8936, #dd6b20);
             color: white;
+            pointer-events: none;
+            opacity: 0.5;
         }
 
-        .next-button:hover {
-            background: linear-gradient(45deg, #dd6b20, #c05621);
-            transform: translateY(-2px);
+        .next-button.active {
+            pointer-events: auto;
+            opacity: 1;
         }
 
         @media (max-width: 768px) {
@@ -333,25 +265,6 @@
             .container {
                 padding: 20px;
             }
-
-            .section div[style*="flex"] {
-                flex-direction: column !important;
-                align-items: stretch !important;
-            }
-
-            .nav-button {
-                text-align: center;
-                justify-content: center;
-            }
-
-            .draggable-item {
-                font-size: 0.8rem;
-                min-height: 50px;
-            }
-
-            .scale-box {
-                min-height: 80px;
-            }
         }
     </style>
 </head>
@@ -361,10 +274,6 @@
             <h1>🔬 微觀尺度的重要性</h1>
         </div>
 
-
-
-
-
         <div class="section">
             <h2>🎯 點選正確的描述</h2>
             <p class="intro-text">先點選一個描述，再點擊對應的格子來放入答案：</p>
@@ -373,24 +282,12 @@
                 <div class="items-pool">
                     <h3>📋 描述選項</h3>
                     <div class="items-grid">
-                        <div class="clickable-item" data-type="micro" data-organism="lotus">
-                            有許多細小的突起，能夠隔離雜質和水
-                        </div>
-                        <div class="clickable-item" data-type="macro" data-organism="insect">
-                            一顆圓形的眼睛
-                        </div>
-                        <div class="clickable-item" data-type="micro" data-organism="salvinia">
-                            表面的毛狀構造能夠隔離水
-                        </div>
-                        <div class="clickable-item" data-type="macro" data-organism="lotus">
-                            有平坦的表面
-                        </div>
-                        <div class="clickable-item" data-type="micro" data-organism="insect">
-                            複眼是由許多六角形的小眼所組成
-                        </div>
-                        <div class="clickable-item" data-type="macro" data-organism="salvinia">
-                            表面有毛狀構造
-                        </div>
+                        <div class="clickable-item" data-type="micro" data-organism="lotus">有許多細小的突起，能夠隔離雜質和水</div>
+                        <div class="clickable-item" data-type="macro" data-organism="insect">一顆圓形的眼睛</div>
+                        <div class="clickable-item" data-type="micro" data-organism="salvinia">表面的毛狀構造能夠隔離水</div>
+                        <div class="clickable-item" data-type="macro" data-organism="lotus">有平坦的表面</div>
+                        <div class="clickable-item" data-type="micro" data-organism="insect">複眼是由許多六角形的小眼所組成</div>
+                        <div class="clickable-item" data-type="macro" data-organism="salvinia">表面有毛狀構造</div>
                     </div>
                 </div>
 
@@ -436,39 +333,28 @@
 
         <div class="section">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <a href="page3.html" target="_blank" rel="noopener noreferrer" class="nav-button prev-button">
-                    ← 上一頁
-                </a>
-                <a href="index.html" target="_blank" rel="noopener noreferrer" class="nav-button home-button">
-                    🏠 回到首頁
-                </a>
-                <a href="page5.html" target="_blank" rel="noopener noreferrer" class="nav-button next-button">
-                    下一頁 →
-                </a>
+                <a href="page3.html" target="_blank" class="nav-button prev-button">← 上一頁</a>
+                <a href="index.html" target="_blank" class="nav-button home-button">🏠 回到首頁</a>
+                <a href="page5.html" id="nextPageBtn" class="nav-button next-button">下一頁 →</a>
             </div>
         </div>
     </div>
 
     <script>
-        // 點擊選擇功能
         let selectedItem = null;
 
-        // 處理答案放置的函數
         function placeAnswer(targetBox, selectedAnswer) {
             if (!targetBox || !selectedAnswer) return false;
-            
-            // 檢查是否匹配
+
             const itemOrganism = selectedAnswer.dataset.organism;
             const itemType = selectedAnswer.dataset.type;
             const boxOrganism = targetBox.dataset.organism;
             const boxScale = targetBox.dataset.scale;
 
             if (itemOrganism === boxOrganism && itemType === boxScale) {
-                // 清除原有內容
                 const dropText = targetBox.querySelector('.drop-text');
                 if (dropText) dropText.remove();
                 
-                // 添加描述文字
                 const description = document.createElement('div');
                 description.textContent = selectedAnswer.textContent;
                 description.style.textAlign = 'center';
@@ -477,46 +363,30 @@
                 description.style.fontWeight = '500';
                 targetBox.appendChild(description);
                 
-                // 隱藏原始項目
                 selectedAnswer.style.display = 'none';
                 targetBox.dataset.filled = 'true';
                 targetBox.dataset.correct = 'true';
                 
-                // 成功放置的視覺反饋
                 targetBox.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    targetBox.style.transform = '';
-                }, 300);
+                setTimeout(() => targetBox.style.transform = '', 300);
                 
                 return true;
             } else {
-                // 錯誤放置的視覺反饋
                 targetBox.style.background = '#fed7d7';
                 setTimeout(() => {
-                    if (targetBox.classList.contains('macro')) {
-                        targetBox.style.background = '#fef5e7';
-                    } else {
-                        targetBox.style.background = '#e6fffa';
-                    }
+                    targetBox.style.background = targetBox.classList.contains('macro') ? '#fef5e7' : '#e6fffa';
                 }, 500);
                 return false;
             }
         }
 
-        // 為每個答案選項添加點擊事件
         document.querySelectorAll('.clickable-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                // 如果項目已經被使用，不允許選擇
+            item.addEventListener('click', () => {
                 if (item.style.display === 'none') return;
-                
-                // 清除之前的選擇
                 document.querySelectorAll('.clickable-item').forEach(i => i.classList.remove('selected'));
-                
-                // 選擇當前項目
                 item.classList.add('selected');
                 selectedItem = item;
-                
-                // 添加提示文字
+
                 const feedback = document.getElementById('drag-feedback');
                 feedback.style.display = 'block';
                 feedback.className = 'feedback';
@@ -527,40 +397,31 @@
             });
         });
 
-        // 為每個答案格添加點擊事件
         document.querySelectorAll('.scale-box').forEach(box => {
-            box.addEventListener('click', (e) => {
-                // 如果格子已經填入答案，不允許再次點擊
+            box.addEventListener('click', () => {
                 if (box.dataset.filled === 'true') return;
-                
+
                 if (selectedItem) {
                     const success = placeAnswer(box, selectedItem);
                     if (success) {
-                        // 清除選擇狀態
                         selectedItem.classList.remove('selected');
                         selectedItem = null;
-                        
-                        // 更新提示
+
                         const feedback = document.getElementById('drag-feedback');
                         feedback.style.display = 'block';
                         feedback.className = 'feedback correct';
                         feedback.textContent = '✅ 答案放置成功！請繼續選擇其他答案。';
-                        
-                        // 3秒後隱藏提示
+
                         setTimeout(() => {
-                            if (feedback.className === 'feedback correct') {
-                                feedback.style.display = 'none';
-                            }
+                            if (feedback.className === 'feedback correct') feedback.style.display = 'none';
                         }, 3000);
                     } else {
-                        // 錯誤提示
                         const feedback = document.getElementById('drag-feedback');
                         feedback.style.display = 'block';
                         feedback.className = 'feedback incorrect';
                         feedback.textContent = '❌ 答案不匹配！請檢查生物種類和觀察尺度是否對應。';
                     }
                 } else {
-                    // 沒有選擇答案的提示
                     const feedback = document.getElementById('drag-feedback');
                     feedback.style.display = 'block';
                     feedback.className = 'feedback';
@@ -570,17 +431,11 @@
                     feedback.textContent = '⚠️ 請先點選一個描述答案！';
                 }
             });
-            
-            // 滑鼠懸停效果
-            box.addEventListener('mouseenter', (e) => {
-                if (selectedItem && box.dataset.filled !== 'true') {
-                    box.classList.add('drag-over');
-                }
+
+            box.addEventListener('mouseenter', () => {
+                if (selectedItem && box.dataset.filled !== 'true') box.classList.add('drag-over');
             });
-            
-            box.addEventListener('mouseleave', (e) => {
-                box.classList.remove('drag-over');
-            });
+            box.addEventListener('mouseleave', () => box.classList.remove('drag-over'));
         });
 
         function checkDragDrop() {
@@ -589,22 +444,24 @@
             let total = boxes.length;
 
             boxes.forEach(box => {
-                if (box.dataset.correct === 'true') {
-                    correct++;
-                }
+                if (box.dataset.correct === 'true') correct++;
             });
 
             const feedback = document.getElementById('drag-feedback');
             feedback.style.display = 'block';
 
+            const nextBtn = document.getElementById('nextPageBtn');
+
             if (correct === total) {
                 feedback.className = 'feedback correct';
                 feedback.textContent = '🎉 完美！所有配對都正確！您已經掌握了巨觀與微觀觀察的差異。';
+                nextBtn.classList.add('active');
             } else {
                 feedback.className = 'feedback incorrect';
                 feedback.textContent = `還需要努力！目前正確配對：${correct}/${total}。請先點選描述，再點擊對應的生物和尺度格子。`;
+                nextBtn.classList.remove('active');
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984e6cf3941d4a3f',t:'MTc1ODg0NDI0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
