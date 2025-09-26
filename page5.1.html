@@ -1,0 +1,119 @@
+<div class="exercise-section">
+    <div class="exercise-title">🔬 點選答案再放入格子練習</div>
+    
+    <div class="questions-row">
+        <div class="question-text">題目：</div>
+        <div class="scale-sections">
+            <div class="scale-section">
+                <div class="question-item">
+                    <strong>1. 巨觀尺度的觀察</strong><br>
+                    Q: 如何從巨觀尺度觀察？
+                    <div class="drop-zone" data-answer="👁️ 以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。">
+                        點選答案後點擊此處
+                    </div>
+                </div>
+                <div class="question-item">
+                    Q: 從巨觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因為何？
+                    <div class="drop-zone" data-answer="📐 因為羽毛排列十分整齊，不易被風吹動">
+                        點選答案後點擊此處
+                    </div>
+                </div>
+            </div>
+            <div class="scale-section">
+                <div class="question-item">
+                    <strong>2. 微觀尺度的觀察</strong><br>
+                    Q: 如何從微觀尺度觀察？
+                    <div class="drop-zone" data-answer="🔬 使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。">
+                        點選答案後點擊此處
+                    </div>
+                </div>
+                <div class="question-item">
+                    Q: 從微觀尺度觀察，鳥類羽毛能夠維持整齊、不被風吹亂的原因為何？
+                    <div class="drop-zone" data-answer="🪝 因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。">
+                        點選答案後點擊此處
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="answers-row">
+        <div class="question-text">答案選項：</div>
+        <div class="choices" id="dragChoices">
+            <div class="choice-item" onclick="selectDragAnswer(this)">
+                👁️ 以肉眼觀察羽毛的排列，並用手指輕撥羽毛，觀察被撥動時羽毛的情形。
+            </div>
+            <div class="choice-item" onclick="selectDragAnswer(this)">
+                📐 因為羽毛排列十分整齊，不易被風吹動
+            </div>
+            <div class="choice-item" onclick="selectDragAnswer(this)">
+                🔬 使用複式顯微鏡觀察羽毛正面的結構，並同時以一手按壓羽毛，另一手手指輕撥羽毛，從顯微鏡中觀察被撥動時羽毛的情形。
+            </div>
+            <div class="choice-item" onclick="selectDragAnswer(this)">
+                🪝 因為羽毛間有倒鉤的細毛，使羽毛緊密相連，不易被風吹散。
+            </div>
+        </div>
+    </div>
+    
+    <button class="reset-btn" onclick="resetClickDrop()">🔄 重新開始</button>
+</div>
+
+<script>
+    let selectedDragAnswer = null;
+
+    // 選擇答案
+    function selectDragAnswer(element) {
+        // 取消其他選中狀態
+        document.querySelectorAll('#dragChoices .choice-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        element.classList.add('selected');
+        selectedDragAnswer = element.textContent.trim();
+    }
+
+    // 點擊放置區塊
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.addEventListener('click', function() {
+            if (!selectedDragAnswer) return;
+
+            const correctAnswer = this.dataset.answer;
+            if (selectedDragAnswer === correctAnswer) {
+                this.textContent = selectedDragAnswer;
+                this.classList.add('filled');
+                // 隱藏已選答案
+                document.querySelectorAll('#dragChoices .choice-item').forEach(item => {
+                    if (item.textContent.trim() === selectedDragAnswer) {
+                        item.style.display = 'none';
+                    }
+                });
+                // 成功動畫
+                this.style.animation = 'pulse 0.6s ease-in-out';
+                setTimeout(() => { this.style.animation = ''; }, 600);
+            } else {
+                // 錯誤動畫
+                this.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => { this.style.animation = ''; }, 500);
+            }
+
+            // 清除選擇
+            document.querySelectorAll('#dragChoices .choice-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            selectedDragAnswer = null;
+        });
+    });
+
+    function resetClickDrop() {
+        // 重置放置區
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.classList.remove('filled');
+            zone.textContent = '點選答案後點擊此處';
+        });
+        // 重置選項
+        document.querySelectorAll('#dragChoices .choice-item').forEach(item => {
+            item.style.display = 'flex';
+            item.classList.remove('selected');
+        });
+        selectedDragAnswer = null;
+    }
+</script>
