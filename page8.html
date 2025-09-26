@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>各種物體的尺度</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Noto Sans TC', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .objects-pool {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px dashed #cbd5e0;
+        }
+
+        .pool-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .objects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .object-item {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-height: 80px;
+            justify-content: center;
+        }
+
+        .object-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.3);
+        }
+
+        .object-item.selected {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #38a169, #2f855a);
+        }
+
+        .object-item.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .object-icon {
+            font-size: 1.5rem;
+        }
+
+        .sorting-area {
+            background: #edf2f7;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .sorting-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .slots-container {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .slot {
+            background: white;
+            border: 3px dashed #cbd5e0;
+            border-radius: 12px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 10px;
+        }
+
+        .slot:hover {
+            border-color: #4299e1;
+            background: #f0f8ff;
+        }
+
+        .slot.filled {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border-color: #38a169;
+            cursor: default;
+        }
+
+        .slot-number {
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            font-size: 0.8rem;
+            color: #718096;
+            font-weight: bold;
+        }
+
+        .slot.filled .slot-number {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .slot-content {
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .slot-scale {
+            font-size: 0.7rem;
+            color: #718096;
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        .slot.filled .slot-scale {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+        }
+
+        .btn-check {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .success {
+            color: #38a169;
+        }
+
+        .error {
+            color: #e53e3e;
+        }
+
+        @media (max-width: 768px) {
+            .slots-container {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+            
+            .objects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>各種物體的尺度</h1>
+        <p class="subtitle">將物體由小排到大排列</p>
+        
+        <div class="game-area">
+            <div class="objects-pool">
+                <div class="pool-title">點選物體名稱，再點選空格放入</div>
+                <div class="objects-grid" id="objectsGrid">
+                    <div class="object-item" data-object="台灣" data-scale="macro"><div class="object-icon">🏝️</div><div>台灣</div></div>
+                    <div class="object-item" data-object="原子" data-scale="nano"><div class="object-icon">⚛️</div><div>原子</div></div>
+                    <div class="object-item" data-object="101大樓" data-scale="macro"><div class="object-icon">🏢</div><div>101大樓</div></div>
+                    <div class="object-item" data-object="細菌" data-scale="micro"><div class="object-icon">🔬</div><div>細菌</div></div>
+                    <div class="object-item" data-object="太陽" data-scale="macro"><div class="object-icon">☀️</div><div>太陽</div></div>
+                    <div class="object-item" data-object="頭髮直徑" data-scale="micro"><div class="object-icon">💇</div><div>頭髮直徑</div></div>
+                    <div class="object-item" data-object="病毒" data-scale="nano"><div class="object-icon">🦠</div><div>病毒</div></div>
+                    <div class="object-item" data-object="人" data-scale="macro"><div class="object-icon">🧑</div><div>人</div></div>
+                </div>
+            </div>
+
+            <div class="sorting-area">
+                <div class="sorting-title">排序區域（由小到大）</div>
+                <div class="slots-container" id="slotsContainer">
+                    <div class="slot" data-position="1"><div class="slot-number">1</div><div class="slot-content">最小</div><div class="slot-scale">奈米尺度</div></div>
+                    <div class="slot" data-position="2"><div class="slot-number">2</div><div class="slot-content"></div><div class="slot-scale">奈米尺度</div></div>
+                    <div class="slot" data-position="3"><div class="slot-number">3</div><div class="slot-content"></div><div class="slot-scale">微米尺度</div></div>
+                    <div class="slot" data-position="4"><div class="slot-number">4</div><div class="slot-content"></div><div class="slot-scale">微米尺度</div></div>
+                    <div class="slot" data-position="5"><div class="slot-number">5</div><div class="slot-content"></div><div class="slot-scale">巨觀尺度</div></div>
+                    <div class="slot" data-position="6"><div class="slot-number">6</div><div class="slot-content"></div><div class="slot-scale">巨觀尺度</div></div>
+                    <div class="slot" data-position="7"><div class="slot-number">7</div><div class="slot-content"></div><div class="slot-scale">巨觀尺度</div></div>
+                    <div class="slot" data-position="8"><div class="slot-number">8</div><div class="slot-content">最大</div><div class="slot-scale">巨觀尺度</div></div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-reset" onclick="resetGame()">重新開始</button>
+                    <button class="btn btn-check" onclick="checkAnswer()">檢查答案</button>
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="page7.html" class="btn">上一頁</a>
+            <a href="index.html" class="btn">回到首頁</a>
+            <a href="page9.html" class="btn disabled" id="nextBtn">下一頁</a>
+        </div>
+    </div>
+
+    <script>
+        let selectedObject = null;
+        let gameState = {};
+        const correctOrder = ['原子', '病毒', '細菌', '頭髮直徑', '人', '101大樓', '台灣', '太陽'];
+
+        function initGame() {
+            gameState = {};
+            selectedObject = null;
+            document.querySelectorAll('.object-item').forEach(item => item.classList.remove('selected','used'));
+            document.querySelectorAll('.slot').forEach(slot => {
+                slot.classList.remove('filled');
+                const content = slot.querySelector('.slot-content');
+                const position = slot.dataset.position;
+                if(position==='1'){content.textContent='最小';}
+                else if(position==='8'){content.textContent='最大';}
+                else{content.textContent='';}
+            });
+            document.getElementById('feedback').textContent='';
+            document.getElementById('nextBtn').classList.add('disabled');
+        }
+
+        document.querySelectorAll('.object-item').forEach(item=>{
+            item.addEventListener('click',function(){
+                if(this.classList.contains('used')) return;
+                document.querySelectorAll('.object-item').forEach(obj=>obj.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedObject=this.dataset.object;
+            });
+        });
+
+        document.querySelectorAll('.slot').forEach(slot=>{
+            slot.addEventListener('click',function(){
+                if(!selectedObject){
+                    document.getElementById('feedback').innerHTML='<span class="error">請先選擇一個物體！</span>';
+                    return;
+                }
+                if(this.classList.contains('filled')){
+                    document.getElementById('feedback').innerHTML='<span class="error">這個位置已經被佔用了！</span>';
+                    return;
+                }
+                const position=this.dataset.position;
+                gameState[position]=selectedObject;
+                this.classList.add('filled');
+                this.querySelector('.slot-content').textContent=selectedObject;
+                const objEl=document.querySelector(`[data-object="${selectedObject}"]`);
+                objEl.classList.add('used'); objEl.classList.remove('selected');
+                selectedObject=null;
+                document.getElementById('feedback').innerHTML='<span class="success">放置成功！</span>';
+
+                if(Object.keys(gameState).length===8){
+                    setTimeout(()=>{document.getElementById('feedback').innerHTML='<span class="success">全部放置完成！點擊「檢查答案」來驗證結果。</span>';},1000);
+                }
+            });
+        });
+
+        function resetGame(){
+            initGame();
+            document.getElementById('feedback').innerHTML='<span class="success">遊戲已重置，請重新開始排序！</span>';
+        }
+
+        function checkAnswer(){
+            if(Object.keys(gameState).length!==8){
+                document.getElementById('feedback').innerHTML='<span class="error">請先完成所有排序！</span>';
+                return;
+            }
+            let correct=true;
+            let correctCount=0;
+            for(let i=1;i<=8;i++){
+                if(gameState[i.toString()]===correctOrder[i-1]) correctCount++;
+                else correct=false;
+            }
+            const nextBtn=document.getElementById('nextBtn');
+            if(correct){
+                document.getElementById('feedback').innerHTML='<span class="success">🎉 恭喜！全部答對了！物體尺度排序完全正確！</span>';
+                nextBtn.classList.remove('disabled');
+            }else{
+                document.getElementById('feedback').innerHTML=`<span class="error">還有 ${8-correctCount} 個位置需要調整。</span>`;
+                nextBtn.classList.add('disabled');
+            }
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
