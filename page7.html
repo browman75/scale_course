@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>長度尺度學習頁面</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 { text-align: center; color: #4a5568; font-size: 2.5rem; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);}
+        .section { margin-bottom: 40px; padding: 25px; background: #f8fafc; border-radius: 15px; border-left: 5px solid #667eea;}
+        .section h2 { color: #2d3748; font-size: 1.5rem; margin-bottom: 20px;}
+        .fill-blank { margin: 15px 0; font-size: 1.1rem; line-height: 1.8;}
+        .blank { display: inline-block; min-width: 80px; padding: 5px 10px; margin: 0 5px; border: 2px solid #cbd5e0; border-radius: 8px; background: white; text-align: center; font-weight: bold; color: #4a5568; cursor: pointer;}
+        .blank.filled { background: #e6fffa; border-color: #38b2ac; color: #234e52;}
+        .blank.correct { background: #c6f6d5; border-color: #38a169; color: #22543d;}
+        .blank.incorrect { background: #fed7d7; border-color: #e53e3e; color: #742a2a;}
+        .matching-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;}
+        .matching-column { background: white; padding: 20px; border-radius: 12px; border: 2px solid #e2e8f0;}
+        .matching-column h3 { text-align: center; color: #4a5568; margin-bottom: 15px; font-size: 1.2rem;}
+        .match-item { padding: 12px 15px; margin: 8px 0; background: #edf2f7; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; text-align: center; font-weight: 500;}
+        .match-item:hover { background: #e2e8f0; transform: translateY(-2px);}
+        .match-item.selected { background: #bee3f8; border-color: #3182ce; color: #2c5282;}
+        .match-item.matched { background: #c6f6d5; border-color: #38a169; color: #22543d; cursor: default;}
+        .check-btn, .reset-btn { border: none; padding: 12px 25px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin: 10px 5px; transition: all 0.3s ease; font-weight: 600;}
+        .check-btn { background: #667eea; color: white;}
+        .check-btn:hover { background: #5a67d8; transform: translateY(-2px);}
+        .reset-btn { background: #718096; color: white;}
+        .reset-btn:hover { background: #4a5568; transform: translateY(-2px);}
+        .navigation { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 30px; border-top: 2px solid #e2e8f0;}
+        .nav-btn { background: #4299e1; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; font-weight: 600; text-decoration: none; display: inline-block;}
+        .nav-btn:hover { background: #3182ce; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
+        .home-btn { background: #38a169;}
+        .home-btn:hover { background: #2f855a;}
+        .nav-btn.disabled { background: #a0aec0; pointer-events: none;}
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: 600; text-align: center;}
+        .feedback.success { background: #c6f6d5; color: #22543d; border: 2px solid #38a169;}
+        .feedback.error { background: #fed7d7; color: #742a2a; border: 2px solid #e53e3e;}
+        @media (max-width: 768px) {
+            .container { padding: 20px;}
+            .matching-container { grid-template-columns: 1fr;}
+            .navigation { flex-direction: column; gap: 15px;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>長度尺度</h1>
+
+    <!-- 常用長度尺度填充題 -->
+    <div class="section">
+        <h2>常用的長度尺度（填充題：多少米、10的多少次方）</h2>
+        <div class="fill-blank">
+            1毫米 = <span class="blank" data-answer="0.001">____</span> 米 = 10的<span class="blank" data-answer="-3">____</span>次方米
+        </div>
+        <div class="fill-blank">
+            1公分 = <span class="blank" data-answer="0.01">____</span> 米 = 10的<span class="blank" data-answer="-2">____</span>次方米
+        </div>
+        <div class="fill-blank">
+            1公里 = <span class="blank" data-answer="1000">____</span> 米 = 10的<span class="blank" data-answer="3">____</span>次方米
+        </div>
+        <button class="check-btn" onclick="checkFillBlanks('common')">檢查答案</button>
+        <button class="reset-btn" onclick="resetFillBlanks('common')">重新填寫</button>
+        <div id="common-feedback" class="feedback" style="display: none;"></div>
+    </div>
+
+    <!-- 微觀尺度填充題 -->
+    <div class="section">
+        <h2>微觀尺度的長度尺度</h2>
+        <div class="fill-blank">
+            1微米 = <span class="blank" data-answer="0.000001">____</span> 米 = 10的<span class="blank" data-answer="-6">____</span>次方米
+        </div>
+        <div class="fill-blank">
+            1奈米 = <span class="blank" data-answer="0.000000001">____</span> 米 = 10的<span class="blank" data-answer="-9">____</span>次方米
+        </div>
+        <button class="check-btn" onclick="checkFillBlanks('micro')">檢查答案</button>
+        <button class="reset-btn" onclick="resetFillBlanks('micro')">重新填寫</button>
+        <div id="micro-feedback" class="feedback" style="display: none;"></div>
+    </div>
+
+    <!-- 配對題 -->
+    <div class="section">
+        <h2>長度的中英文表示法（配對題）</h2>
+        <div class="matching-container">
+            <div class="matching-column">
+                <h3>中文</h3>
+                <div class="match-item" data-match="mm" onclick="selectItem(this)">毫米</div>
+                <div class="match-item" data-match="cm" onclick="selectItem(this)">公分</div>
+                <div class="match-item" data-match="m" onclick="selectItem(this)">公尺</div>
+                <div class="match-item" data-match="km" onclick="selectItem(this)">公里</div>
+                <div class="match-item" data-match="μm" onclick="selectItem(this)">微米</div>
+                <div class="match-item" data-match="nm" onclick="selectItem(this)">奈米</div>
+            </div>
+            <div class="matching-column">
+                <h3>英文符號</h3>
+                <div class="match-item" data-match="km" onclick="selectItem(this)">km</div>
+                <div class="match-item" data-match="m" onclick="selectItem(this)">m</div>
+                <div class="match-item" data-match="cm" onclick="selectItem(this)">cm</div>
+                <div class="match-item" data-match="mm" onclick="selectItem(this)">mm</div>
+                <div class="match-item" data-match="μm" onclick="selectItem(this)">μm</div>
+                <div class="match-item" data-match="nm" onclick="selectItem(this)">nm</div>
+            </div>
+        </div>
+        <button class="check-btn" onclick="checkMatching()">檢查配對</button>
+        <button class="reset-btn" onclick="resetMatching()">重新配對</button>
+        <div id="matching-feedback" class="feedback" style="display: none;"></div>
+    </div>
+
+    <!-- 觀測方式配對題 -->
+    <div class="section">
+        <h2>不同微觀的觀測方式（配對題）</h2>
+        <div class="matching-container">
+            <div class="matching-column">
+                <h3>尺度</h3>
+                <div class="match-item observation-match" data-match="optical" onclick="selectObservationItem(this)">微米尺度</div>
+                <div class="match-item observation-match" data-match="electron" onclick="selectObservationItem(this)">奈米尺度</div>
+            </div>
+            <div class="matching-column">
+                <h3>觀測方式</h3>
+                <div class="match-item observation-match" data-match="electron" onclick="selectObservationItem(this)">電子顯微鏡</div>
+                <div class="match-item observation-match" data-match="optical" onclick="selectObservationItem(this)">光學顯微鏡</div>
+            </div>
+        </div>
+        <button class="check-btn" onclick="checkObservationMatching()">檢查配對</button>
+        <button class="reset-btn" onclick="resetObservationMatching()">重新配對</button>
+        <div id="observation-feedback" class="feedback" style="display: none;"></div>
+    </div>
+
+    <!-- 導航按鈕 -->
+    <div class="navigation">
+        <a href="page6.html" class="nav-btn">上一頁</a>
+        <a href="index.html" class="nav-btn home-btn">回到首頁</a>
+        <a href="#" class="nav-btn disabled" id="nextBtn">下一頁</a>
+    </div>
+</div>
+
+<script>
+let selectedItems = [], matchedPairs = [], selectedObservationItems = [], matchedObservationPairs = [];
+
+// 讓空格可編輯
+document.querySelectorAll('.blank').forEach(blank => {
+    blank.addEventListener('click', () => {
+        if(blank.classList.contains('correct')) return;
+        const input = document.createElement('input');
+        input.type='text';
+        input.value = blank.textContent==='____'?'':blank.textContent;
+        input.style.width='80px'; input.style.padding='5px'; input.style.border='2px solid #cbd5e0'; input.style.borderRadius='8px'; input.style.textAlign='center'; input.style.fontWeight='bold';
+        blank.innerHTML=''; blank.appendChild(input); input.focus();
+        input.addEventListener('blur',()=>{ blank.textContent = input.value||'____'; if(input.value) blank.classList.add('filled'); });
+        input.addEventListener('keypress',(e)=>{if(e.key==='Enter') input.blur();});
+    });
+});
+
+// 填充題檢查
+function checkFillBlanks(type){
+    const section = type==='common'?document.querySelector('.section:nth-child(2)'):document.querySelector('.section:nth-child(3)');
+    const blanks = section.querySelectorAll('.blank');
+    const feedback = document.getElementById(type+'-feedback');
+    let correct=0,total=blanks.length;
+    blanks.forEach(blank=>{
+        const answer=blank.dataset.answer,user=blank.textContent.trim();
+        blank.classList.remove('correct','incorrect');
+        if(user===answer){ blank.classList.add('correct'); correct++; }
+        else if(user!=='____'&&user!==''){ blank.classList.add('incorrect'); }
+    });
+    feedback.style.display='block';
+    if(correct===total){ feedback.className='feedback success'; feedback.textContent='🎉 全部答對！做得很好！'; }
+    else{ feedback.className='feedback error'; feedback.textContent=`答對了 ${correct}/${total} 題，請檢查紅色標記的答案。`; }
+    updateNextBtnState();
+}
+
+// 填空題重置
+function resetFillBlanks(type){
+    const section = type==='common'?document.querySelector('.section:nth-child(2)'):document.querySelector('.section:nth-child(3)');
+    const blanks = section.querySelectorAll('.blank');
+    const feedback = document.getElementById(type+'-feedback');
+    blanks.forEach(blank=>{ blank.textContent='____'; blank.classList.remove('filled','correct','incorrect'); });
+    feedback.style.display='none';
+    updateNextBtnState();
+}
+
+// 配對題功能
+function selectItem(item){
+    if(item.classList.contains('matched')) return;
+    if(item.classList.contains('selected')){ item.classList.remove('selected'); selectedItems=selectedItems.filter(i=>i!==item); return; }
+    if(selectedItems.length<2){ item.classList.add('selected'); selectedItems.push(item); if(selectedItems.length===2){ setTimeout(checkPair,500); } }
+}
+
+function checkPair(){
+    if(selectedItems.length!==2) return;
+    const [i1,i2]=selectedItems;
+    if(i1.dataset.match===i2.dataset.match){ i1.classList.remove('selected'); i2.classList.remove('selected'); i1.classList.add('matched'); i2.classList.add('matched'); matchedPairs.push([i1,i2]); }
+    else{ i1.classList.remove('selected'); i2.classList.remove('selected'); }
+    selectedItems=[];
+    updateNextBtnState();
+}
+
+function checkMatching(){
+    const feedback=document.getElementById('matching-feedback');
+    const totalPairs=6;
+    feedback.style.display='block';
+    if(matchedPairs.length===totalPairs){ feedback.className='feedback success'; feedback.textContent='🎉 所有配對都正確！太棒了！'; }
+    else{ feedback.className='feedback error'; feedback.textContent=`已完成 ${matchedPairs.length}/${totalPairs} 組配對，請繼續配對剩餘項目。`; }
+    updateNextBtnState();
+}
+
+function resetMatching(){
+    document.querySelectorAll('.match-item').forEach(i=>i.classList.remove('selected','matched'));
+    selectedItems=[]; matchedPairs=[];
+    document.getElementById('matching-feedback').style.display='none';
+    updateNextBtnState();
+}
+
+// 觀測方式配對題
+function selectObservationItem(item){
+    if(item.classList.contains('matched')) return;
+    if(item.classList.contains('selected')){ item.classList.remove('selected'); selectedObservationItems=selectedObservationItems.filter(i=>i!==item); return; }
+    if(selectedObservationItems.length<2){ item.classList.add('selected'); selectedObservationItems.push(item); if(selectedObservationItems.length===2){ setTimeout(checkObservationPair,500); } }
+}
+
+function checkObservationPair(){
+    if(selectedObservationItems.length!==2) return;
+    const [i1,i2]=selectedObservationItems;
+    if(i1.dataset.match===i2.dataset.match){ i1.classList.remove('selected'); i2.classList.remove('selected'); i1.classList.add('matched'); i2.classList.add('matched'); matchedObservationPairs.push([i1,i2]); }
+    else{ i1.classList.remove('selected'); i2.classList.remove('selected'); }
+    selectedObservationItems=[];
+    updateNextBtnState();
+}
+
+function checkObservationMatching(){
+    const feedback=document.getElementById('observation-feedback');
+    const totalPairs=2;
+    feedback.style.display='block';
+    if(matchedObservationPairs.length===totalPairs){ feedback.className='feedback success'; feedback.textContent='🎉 所有配對都正確！太棒了！'; }
+    else{ feedback.className='feedback error'; feedback.textContent=`已完成 ${matchedObservationPairs.length}/${totalPairs} 組配對，請繼續配對剩餘項目。`; }
+    updateNextBtnState();
+}
+
+function resetObservationMatching(){
+    document.querySelectorAll('.observation-match').forEach(i=>i.classList.remove('selected','matched
